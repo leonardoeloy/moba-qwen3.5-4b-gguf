@@ -1,1 +1,0 @@
-Fixed: The sign now applies to the entire magnitude (hours * 60 + minutes) instead of just the hours component.

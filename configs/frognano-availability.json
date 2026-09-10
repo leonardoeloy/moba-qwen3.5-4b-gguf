@@ -1,7 +1,0 @@
-{
-  "checked_at": "2026-09-10T14:30:01.592091+00:00",
-  "url": "https://huggingface.co/api/models?search=FrogNano&limit=20",
-  "models": [],
-  "project": "https://microsoft.github.io/debug-gym/",
-  "status": "No public checkpoint identified; search absence is not proof of nonexistence"
-}

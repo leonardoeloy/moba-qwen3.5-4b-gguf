@@ -1,7 +1,0 @@
-<tool_call>
-<function=read>
-<parameter=path>
-README.md
-</parameter>
-</function>
-</tool_call>

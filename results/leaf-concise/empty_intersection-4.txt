@@ -1,8 +1,0 @@
-The current implementation `return a < d and c < b` is incorrect for empty intervals. For example, if `a=0, b=1, c=1, d=2`, the intervals `[0,1)` and `[1,2)` don't overlap (they only touch at 1), but the formula gives `0 < 2 and 1 < 1` which is `True and False` = `False` - actually that works. Let me think of a case where it fails.
-
-For `[0, 1)` and `[0, 1)`: `0 < 1 and 0 < 1` = `True` - correct.
-For `[0, 1)` and `[1, 2)`: `0 < 2 and 1 < 1` = `False` - correct.
-For `[0, 0)` (empty): `0 < 0 and 0 < 0` = `False` - correct.
-
-Wait, let me check `[0, 1)` and `[0, 1]` - but the problem says half-open intervals. Let me check negative endpoints:
-For `[-1, 0)` and `[0, 1

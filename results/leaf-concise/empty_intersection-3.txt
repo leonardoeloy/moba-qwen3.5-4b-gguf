@@ -1,7 +1,0 @@
-<tool_call>
-<function=bash>
-<parameter=command>
-cat README.md
-</parameter>
-</function>
-</tool_call>

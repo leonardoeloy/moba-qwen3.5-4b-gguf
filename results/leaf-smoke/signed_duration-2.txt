@@ -1,7 +1,0 @@
-<tool_call>
-<function=read>
-<parameter=path>
-duration.py
-</parameter>
-</function>
-</tool_call>

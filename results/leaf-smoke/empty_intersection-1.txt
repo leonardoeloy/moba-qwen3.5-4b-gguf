@@ -1,7 +1,0 @@
-<tool_call>
-<function=glob>
-<parameter=pattern>
-*
-</parameter>
-</function>
-</tool_call>

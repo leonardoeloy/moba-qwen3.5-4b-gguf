@@ -1,6 +1,6 @@
 # Qwen3.5-4B test card
 
-**Status: 1.52x scored-prefill throughput at 32K on one passage; no meaningful improvement at 2K/4K. Later KV quantization reaches 3.56x smaller cache with 1.39x prefill throughput. Approximate attention; no FrogNano reproduction or full-model training.**
+**Status: 1.52x scored-prefill throughput at 32K on one passage; no meaningful improvement at 2K/4K. Later KV quantization reaches 3.56x smaller cache with 1.39x prefill throughput. Approximate attention; no full-model training.**
 
 Model: Unsloth Qwen3.5-4B Q4_K_M GGUF, with exact revision and SHA-256 in [dependencies.json](dependencies.json). Hardware: Intel Core i5-13500H, Iris Xe RPL-P integrated GPU, 32 GiB system RAM, Linux/Vulkan. The model log confirms 33/33 model/output layers offloaded to Vulkan. FP16 KV, batch 256, four CPU threads; submission cap 8 and serialized submissions. [Hardware record](results/hardware.json), [stock GPU log](results/stock/dense-2k.log).
 
@@ -85,7 +85,7 @@ Prompts contained about 2.8K tokens of unrelated source context plus a short fun
 
 See [README commands](README.md#run-experiments). The standalone backend is rebuilt with `python3 scripts/setup.py --model`; `--stock` reconstructs the unmodified upstream baseline. The final patch applies to clean pinned source files, matches the local source changes, and reverses cleanly. Current Python drivers require no third-party packages.
 
-The earlier Qwen3-4B results, including its 1.99x 32K measurement, are [archived separately](archive/qwen3-4b/TEST_CARD.md). They do not describe this model. [FrogNano feasibility](docs/FROGNANO.md) records what can and cannot currently be reproduced.
+The earlier Qwen3-4B results, including its 1.99x 32K measurement, are [archived separately](archive/qwen3-4b/TEST_CARD.md). They do not describe this model.
 
 ## KV precision at 32K
 
@@ -132,9 +132,3 @@ The checkpoint occupied **339.13 MiB**, with **0.334 s** save plus fsync and app
 All four restored runs matched their own recomputed prompt tokens, 32 generated tokens, and all 7,946,240 checked vocabulary logits exactly: **31,784,960 logits, zero bitwise mismatches**. This establishes observed checkpoint fidelity relative to MoBA/Q4_0, not equivalence to dense FP16 or answer correctness. New prefixes still pay full prefill. Active KV allocation is unchanged; saved files consume additional storage. Initial experiment fingerprinting/manifest publication are excluded, and complete-process times include instrumentation. One prefix and three short questions do not establish production hit rates or statistical performance guarantees.
 
 [Results](results/prefix-32k/results.json), [amortization](results/prefix-32k/analysis.json), [2K smoke](results/prefix-smoke/results.json), [setup, timing definitions, and diagram analysis](docs/PREFIX_CACHE.md).
-
-## Leaf-inspired local repair pilot
-
-The five-tool harness ran two handcrafted tasks under two configurations, using the existing Qwen3.5 MoBA/Q4_0 model without weight updates. The original four-turn configuration produced 1/2 passing patches and no natural finishes in 187.99 seconds. A follow-up with a concise-tool instruction and six-turn limit produced 1/2 passing patches and one natural finish in 174.86 seconds. Both interval-repair attempts hit the 256-token generation cap without editing; both signed-duration patches passed seven grading cases.
-
-This demonstrates one naturally completed local repair, not improved solve rate, a measured MoBA acceleration, a TaskPilot curriculum or RL. Tasks are handcrafted and related to prior smoke fixtures. Grading cases were hidden during interaction but are included in the release. Both prompt and turn budget changed, and timings are single observations. [Full method and results](docs/LEAF_PILOT.md).

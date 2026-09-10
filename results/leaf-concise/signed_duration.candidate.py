@@ -1,2 +1,0 @@
-def duration_minutes(sign, hours, minutes):
-    return sign * (hours * 60 + minutes)

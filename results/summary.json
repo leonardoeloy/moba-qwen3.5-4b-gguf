@@ -41,7 +41,7 @@
       "solved_per_hour": 74.3832488251979
     }
   },
-  "conclusion": "Measured 1.52x scored-prefill throughput at 32K on one code passage with approximate attention; no meaningful gain demonstrated at 2K/4K; no model training or FrogNano reproduction",
+  "conclusion": "Measured 1.52x scored-prefill throughput at 32K on one code passage with approximate attention; no meaningful gain demonstrated at 2K/4K; no model training",
   "validation-32k": {
     "prefill_speedup": 1.5161304991640705,
     "prefill_time_reduction": 0.3404261700748338,

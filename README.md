@@ -1,6 +1,6 @@
 # Qwen3.5-4B sparse attention on an Intel Vulkan GPU
 
-A fresh experiment measuring whether selective Mixture of Block Attention can make Qwen3.5-4B more useful on an Intel Iris Xe integrated GPU. This uses the publicly available Qwen3.5 checkpoint, **not FrogNano**. The original Qwen model weights remain frozen.
+A fresh experiment measuring whether selective Mixture of Block Attention can make Qwen3.5-4B more useful on an Intel Iris Xe integrated GPU. This uses the publicly available Qwen3.5 checkpoint. The original Qwen model weights remain frozen.
 
 Qwen3.5-4B combines 24 Gated DeltaNet linear-attention layers with eight full-attention layers. Our MoBA path changes only selected full-attention layers during aligned prefill. Decode remains dense. Findings from the previous Qwen3-4B project do not establish performance or quality for this architecture.
 
@@ -27,9 +27,7 @@ A later cache experiment reached **3.56x smaller KV at 32K** (1,040 to 292.5 MiB
 
 11. Added persistent exact-prefix checkpoints containing both attention KV and DeltaNet recurrent state. At 32K, three different questions had bit-identical restored logits and tokens. Warm cache hits reduced complete 32-token benchmark time from about 555 seconds to 10.1–10.4 seconds (53–55x); paying the first full prefill/save gave 2.89x across three questions. This benefit requires an identical cached prefix and does not accelerate a new document. The checkpoint uses 339.13 MiB of storage. [Prefix-cache results and reproduction](docs/PREFIX_CACHE.md).
 
-12. Attempted an independent Leaf-style coding-agent harness inspired by FrogNano. Two bounded configurations each repaired 1/2 handcrafted tasks; the follow-up produced one natural finish. The other task exhausted its generation budget explaining examples. These are tool-loop smoke checks with frozen weights, not FrogNano training or SWE-bench results. [Pilot, failures and reproduction](docs/LEAF_PILOT.md).
-
-Current measurements and limitations are collected in the [test card](TEST_CARD.md). [FrogNano reproduction assessment](docs/FROGNANO.md) distinguishes accessible artifacts, feasible local work, and missing training infrastructure.
+Current measurements and limitations are collected in the [test card](TEST_CARD.md).
 
 ## Setup
 
@@ -79,7 +77,7 @@ Prefill time sums synchronized model calls. With sampling enabled it includes th
 
 Later benchmark trials force the same dense continuation tokens, reporting next-token agreement and continuation NLL. Decode tokens/s measures synchronized one-token model calls and excludes CPU token selection, output writing, and model loading. Coding trials generate freely and have different output lengths; their end-to-end elapsed time includes model loading and grading.
 
-The calibration gates are sampled perplexity ratio <=1.02 and continuation agreement >=0.95. They do not establish statistical equivalence or general quality. Training adaptive routers and a repository-level coding evaluation remain separate research steps. No claim of a FrogNano reproduction or breakthrough follows from this pilot.
+The calibration gates are sampled perplexity ratio <=1.02 and continuation agreement >=0.95. They do not establish statistical equivalence or general quality. Training adaptive routers and a repository-level coding evaluation remain separate research steps. No claim of a breakthrough follows from this pilot.
 
 ## Layout
 
