@@ -1,0 +1,1 @@
+One critical numerical edge case in this code is the **division by zero (or near-zero) when the maximum absolute value (`amax`) of a quantization block

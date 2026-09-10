@@ -1,0 +1,1 @@
+This C code excerpt defines reference implementations for quantizing rows of floating-point data into various compressed formats (Q1_0, Q2_0, Q4

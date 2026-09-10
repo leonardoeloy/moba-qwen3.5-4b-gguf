@@ -1,0 +1,1 @@
+This C code implements reference and optimized implementations for various quantization and dequantization algorithms used in the GGML library to compress neural network weights. It provides functions

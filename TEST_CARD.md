@@ -1,6 +1,6 @@
 # Qwen3.5-4B test card
 
-**Status: 1.52x scored-prefill throughput at 32K on one passage; no meaningful improvement at 2K/4K. Approximate attention, no FrogNano reproduction or model training.**
+**Status: 1.52x scored-prefill throughput at 32K on one passage; no meaningful improvement at 2K/4K. Later KV quantization reaches 3.56x smaller cache with 1.39x prefill throughput. Approximate attention; no FrogNano reproduction or full-model training.**
 
 Model: Unsloth Qwen3.5-4B Q4_K_M GGUF, with exact revision and SHA-256 in [dependencies.json](dependencies.json). Hardware: Intel Core i5-13500H, Iris Xe RPL-P integrated GPU, 32 GiB system RAM, Linux/Vulkan. The model log confirms 33/33 model/output layers offloaded to Vulkan. FP16 KV, batch 256, four CPU threads; submission cap 8 and serialized submissions. [Hardware record](results/hardware.json), [stock GPU log](results/stock/dense-2k.log).
 
@@ -86,3 +86,49 @@ Prompts contained about 2.8K tokens of unrelated source context plus a short fun
 See [README commands](README.md#run-experiments). The standalone backend is rebuilt with `python3 scripts/setup.py --model`; `--stock` reconstructs the unmodified upstream baseline. The final patch applies to clean pinned source files, matches the local source changes, and reverses cleanly. Current Python drivers require no third-party packages.
 
 The earlier Qwen3-4B results, including its 1.99x 32K measurement, are [archived separately](archive/qwen3-4b/TEST_CARD.md). They do not describe this model. [FrogNano feasibility](docs/FROGNANO.md) records what can and cannot currently be reproduced.
+
+## KV precision at 32K
+
+A fresh three-pass comparison kept the MoBA policy fixed and varied cache precision. All passes used 33,280 allocated cells, with no diagnostic profiling or capture. The dense sampled-score and continuation-token files match the earlier 32K control byte-for-byte.
+
+| Configuration | KV allocation | GPU workspace | Scored prefill | Speedup vs dense | Decode, tokens/s | Sampled PPL change | Continuation agreement |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Dense FP16 | 1,040 MiB | 266.26 MiB | 745.17 s | 1.00x | 4.53 | baseline | 64/64 |
+| MoBA FP16 | 1,040 MiB | 247.50 MiB | 491.44 s | 1.52x | 4.61 | +0.74% | 64/64 |
+| MoBA Q4_0 | 292.5 MiB | 367.52 MiB | 535.91 s | 1.39x | 4.54 | +1.20% | 64/64 |
+
+Four-bit MoBA reduced actual KV allocation by **3.56x (71.875%)**, preserving a **28.08% prefill-time reduction** versus dense FP16. It was 9.05% slower in prefill than MoBA FP16. Its sampled PPL was approximately 0.45% higher than MoBA FP16, in addition to the attention approximation. Natural next-token argmax agreement with dense was 506/512 for Q4_0 and 508/512 for FP16 MoBA.
+
+The reported KV-plus-workspace saving is 646.24 MiB versus dense and 627.48 MiB versus FP16 MoBA. The 2,603.5 MiB model buffer and 50.25 MiB recurrent-state buffer are unchanged. These buffer allocations do not measure total process peak RAM. Cache compression is not a 3.56x reduction in total memory.
+
+The Q4_0 candidate passes the point-estimate PPL-ratio <=1.02 and continuation-agreement >=0.95 gates on this passage. A post-run paired-position bootstrap gives a PPL-ratio interval of 1.00159 to 1.02298; its upper end exceeds the 2% gate. This resampling does not account for sequence correlation or generalization. [Analysis](results/kv-32k/analysis.json). One pass per configuration and 512 sampled targets do not establish statistical equivalence, losslessness, or general long-context retrieval quality. Q4_0 is an existing integer cache format, not DeepSeek FP4 or a newly trained attention architecture. [Full records](results/kv-32k/results.json), [4K precision pilot](results/kv-pilot/results.json), [reproduction and architectural scope](docs/KV_CACHE.md).
+
+## Shared-KV adapter: rejected
+
+A separate dense-attention experiment made layer 7 read layer 3's KV bank. This physically reduced eight banks to seven. It fitted a 1,052,672-parameter affine attention-output adapter on Shakespeare, selecting a ridge strength from four candidates using a later portion of the same passage. Vulkan computed covariance matrices; CPU solved and scored the fits. Original Qwen weights stayed frozen.
+
+| 4K technical-passage configuration | KV allocation | Sampled PPL change | Natural argmax agreement | Continuation agreement | Quality gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Original dense | 144 MiB | baseline | 256/256 | 64/64 | control |
+| One shared pair | 126 MiB | -1.61% | 215/256 | 59/64 | fail |
+| Shared pair plus fitted adapter | 126 MiB | +38.59% | 190/256 | 52/64 | fail |
+
+The adapter adds 4,210,688 bytes of Vulkan weight storage beyond the KV allocation. All three scored-prefill times were approximately 41.4 seconds. The fit reduced calibration selection MSE from 0.38872 to 0.08198 (78.9%), but that proxy improvement did not transfer to language-model quality. Its Vulkan application passed a relative-RMSE check against the fitted transform (0.0314%). The failure is not evidence that all forms of learned KV sharing fail; it rejects this output-only affine adaptation on this setup.
+
+**Sharing and the adapter remain off by default.** They were not combined with the successful 32K Q4_0 result, and no four-bank or 32K shared-cache quality claim is made. The failed checkpoint is retained for reproducibility. [Training](results/kv-sharing/training.json), [inference results](results/kv-sharing/results.json), [reproduction](docs/KV_CACHE.md).
+
+## Persistent prefix reuse at 32K
+
+Qwen3.5-4B with the existing MoBA top-32/two-dense-layer policy and Q4_0 KV saved both attention and recurrent state after a 32,768-token code prefix. Each question was evaluated by recomputation and restoration in independent processes. No model weights changed; shared KV and its adapter were disabled.
+
+| Measurement | Recompute | Validated warm restore |
+| --- | ---: | ---: |
+| Model-ready first-token components | 547.37–548.24 s | 2.66–2.91 s (188–206x) |
+| Complete 32-token benchmark process | 555.07–555.88 s | 10.07–10.44 s (53.2–55.2x) |
+| Three distinct questions, summed process time, initial prefill/save charged | 1,666.38 s | 577.00 s (2.89x) |
+
+The checkpoint occupied **339.13 MiB**, with **0.334 s** save plus fsync and approximately **0.078 s** warm restoration. A best-effort file-page eviction variant restored in **0.307 s** and completed in **10.69 s** including validation. Standard restores follow an integrity read, so their filesystem cache is warm.
+
+All four restored runs matched their own recomputed prompt tokens, 32 generated tokens, and all 7,946,240 checked vocabulary logits exactly: **31,784,960 logits, zero bitwise mismatches**. This establishes observed checkpoint fidelity relative to MoBA/Q4_0, not equivalence to dense FP16 or answer correctness. New prefixes still pay full prefill. Active KV allocation is unchanged; saved files consume additional storage. Initial experiment fingerprinting/manifest publication are excluded, and complete-process times include instrumentation. One prefix and three short questions do not establish production hit rates or statistical performance guarantees.
+
+[Results](results/prefix-32k/results.json), [amortization](results/prefix-32k/analysis.json), [2K smoke](results/prefix-smoke/results.json), [setup, timing definitions, and diagram analysis](docs/PREFIX_CACHE.md).

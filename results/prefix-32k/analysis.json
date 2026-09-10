@@ -1,0 +1,13 @@
+{
+  "three_request_uncached_process_s": 1666.3788443656626,
+  "three_request_cached_process_s": 577.002212914871,
+  "three_request_process_speedup": 2.887993853520133,
+  "mean_uncached_process_s": 555.4596147885542,
+  "mean_validated_hit_process_s": 10.285830097971484,
+  "checked_restored_logits": 31784960,
+  "projected_speedup_by_hit_rate": {
+    "0.5": 1.9636379569965974,
+    "0.9": 8.571483219291679
+  },
+  "projection_scope": "Serial equal-cost 32K requests using measured mean complete-process times. Hypothetical hit rates; excludes initial fingerprint/manifest publication, per-miss saves, eviction, contention and cache-capacity effects. Not measured serving throughput."
+}

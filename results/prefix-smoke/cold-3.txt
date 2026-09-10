@@ -1,0 +1,1 @@
+Based on the provided C source code, here is the explanation of the difference between **quantization** and **dequantization**, along with an analysis of the

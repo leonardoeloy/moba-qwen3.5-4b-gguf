@@ -15,3 +15,19 @@ The early search summaries selected against their first dense control. After obs
 A late-start Vulkan profiler was added and exercised on a 2K sparse replay before the long runs. Its timed-pass sampled NLL and continuation metrics exactly matched the previous compact run. The 32K dense and MoBA runs each completed prefill, 64 decode steps, alignment padding, and a diagnostic 256-token append batch. All 512 sampled positions and target IDs matched, and the input token files matched byte-for-byte. Main prefill/decode timings exclude padding and the instrumented batch.
 
 The new runner records a fresh protocol and keeps the top-32 policy fixed. Profile aggregation is reproducible with `experiments/profile_summary.py`. The profiler is a single-device diagnostic; operator serialization and its one append batch limit interpretation.
+
+## KV precision and sharing extension
+
+The new 32K dense-FP16, MoBA-FP16 and MoBA-Q4_0 passes completed successfully with the same allocation size and scoring positions. The fresh dense prompt, sampled scores and continuation tokens match the earlier 32K dense run byte-for-byte. Actual allocated KV falls from 1,040 to 292.5 MiB; the Q4_0 workspace increase is reported separately. All 512 scored position/target pairs match across these runs.
+
+The sharing pilot captures a teacher and a seven-bank student, computes covariances on Vulkan, fits four ridge candidates on CPU, and evaluates the selected output adapter. A short native inference check reproduces its fitted transformation with relative RMSE 0.000314. The dense 4K validation scores and continuation tokens match the precision pilot's dense control exactly; all 256 scored position/target pairs align in the shared and adapted runs. Both shared variants fail the continuation gate; the adapted variant also fails the PPL gate. Neither is enabled by default.
+
+The current seven-file backend patch passes clean application, byte-for-byte source comparison, and reverse checks at the pinned revision. The benchmark and new library changes compile, and the covariance executable runs on Vulkan0. New Python drivers pass syntax checks; no unit-test suite was added. Actual source snapshots are retained beside the new experiment records. The sharing snapshot predates two additional assertions in the current driver that check eight teacher banks and seven student banks; the recorded runs satisfy those assertions. Raw activation/covariance arrays remain in ignored `runs/` while the failed 4,210,688-byte adapter is retained as an experiment artifact.
+
+## Persistent prefix checkpoints
+
+The standalone prefix runner compiled against the unchanged pinned private backend. Both the 2K smoke and 32K experiment completed all seven subprocesses: three full recomputations, three warm restores, and one restore after a best-effort file-page eviction request. All restored prompt-token and generated-token files match their corresponding recomputation. Each restore checked 7,946,240 vocabulary logits with zero bitwise differences and zero maximum absolute error. Saved-state checksums match the retained manifests.
+
+The current source snapshot, executable and runtime library fingerprints match the 32K protocol, and the backend diff still matches the seven-file patch. Python syntax and prefix-documentation links passed checks. The actual driver used at each stage is retained; the 32K driver adds runtime-change checks and broader environment isolation to the smoke driver. The three-question complete-process amortization was independently calculated from the raw trial records and saved in `results/prefix-32k/analysis.json`.
+
+Raw checkpoints and logit arrays remain excluded by Git ignore rules. No unit-test suite was added. Restoration is exact on these observed same-policy runs; dense-model quality, long generations, arbitrary prefixes, production cache routing and sustained serving throughput were not evaluated by this experiment.

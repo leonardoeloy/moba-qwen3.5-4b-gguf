@@ -1,0 +1,3 @@
+Based on the provided C source code, here is a clear and concise explanation of the difference between **quantization** and **dequantization**.
+
+### Core

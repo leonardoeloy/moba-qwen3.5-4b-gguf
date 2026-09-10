@@ -1,0 +1,63 @@
+{
+  "returncode": 0,
+  "stdout": "{\"prompt_tokens\":4096,\"prefill_s\":41.403971355,\"prefill_wall_s\":41.8132427,\"samples\":256,\"nll\":1.61223830527,\"decode_steps\":64,\"decode_s\":11.369969044,\"decode_tps\":5.62886317037,\"continuation_nll\":0.296721990205,\"continuation_matches\":64}\n",
+  "prompt_tokens": 4096,
+  "prefill_s": 41.403971355,
+  "prefill_wall_s": 41.8132427,
+  "samples": 256,
+  "nll": 1.61223830527,
+  "decode_steps": 64,
+  "decode_s": 11.369969044,
+  "decode_tps": 5.62886317037,
+  "continuation_nll": 0.296721990205,
+  "continuation_matches": 64,
+  "elapsed_s": 54.934978537028655,
+  "command": [
+    "/home/maxi/moba/bin/bench",
+    "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+    "data/technical.txt",
+    "4096",
+    "results/kv-sharing/dense",
+    "64",
+    "8",
+    "-"
+  ],
+  "environment": {
+    "MOBA": "0",
+    "BENCH_KV": "f16",
+    "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+    "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+  },
+  "prompt_sha256": "4f7b99bd793bda6d44413f8b5fe192b00b0e02cd26ead1f3678efa9996b4bf6b",
+  "source_sha256": "1e8435da158d13d9f31e16b6a188af8c0f8acc593a798b69a0169d2757bc7b27",
+  "vendor_diff_sha256": "4f17317647ba6a03f73d225f92b07fb1d484ab71830c70534d433a3363b7c157",
+  "moba_sha256": "6b7a946a3cce1ac4e070ff116246f6891ea50a748f3e9826c76237b4cdcbc554",
+  "dependencies": {
+    "llama_cpp": {
+      "url": "https://github.com/ggml-org/llama.cpp.git",
+      "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+      "patch": "patches/moba.patch"
+    },
+    "model": {
+      "repo": "unsloth/Qwen3.5-4B-GGUF",
+      "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+      "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+      "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+      "size": 2740937888
+    },
+    "base_model": {
+      "repo": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+    }
+  },
+  "kv_cache": {
+    "allocated_mib": 144.0,
+    "cells": 4608,
+    "layers": 8
+  },
+  "vulkan_compute_mib": 249.76,
+  "kv_sources": {
+    "kv_share.h": "94f24d3996545c6833a8b0165cf2bd5e6db7126b3fffcae595e2bb7be1ca174d",
+    "kv_adapter.h": "acb4711f33dde5390c1ad685df9f69bb6b3aa998f21f25a77d9409b921950c33"
+  }
+}

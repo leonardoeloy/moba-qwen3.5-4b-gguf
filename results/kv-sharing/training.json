@@ -1,0 +1,41 @@
+{
+  "gpu": {
+    "backend": "Vulkan0",
+    "covariance_s": 0.00974554
+  },
+  "cpu_fit_and_selection_s": 0.3700889248866588,
+  "trials": [
+    {
+      "ridge": 0.0001,
+      "fit_mse": 0.04806550630956403,
+      "selection_mse": 0.1388789857808508
+    },
+    {
+      "ridge": 0.001,
+      "fit_mse": 0.0486199193825906,
+      "selection_mse": 0.12111541673978947
+    },
+    {
+      "ridge": 0.01,
+      "fit_mse": 0.05237168781596585,
+      "selection_mse": 0.09464095893781833
+    },
+    {
+      "ridge": 0.1,
+      "fit_mse": 0.0618199982109062,
+      "selection_mse": 0.08197771903976916
+    }
+  ],
+  "selected_ridge": 0.1,
+  "unadapted_selection_mse": 0.3887203265039926,
+  "adapted_selection_mse": 0.08197771903976916,
+  "parameters": 1052672,
+  "adapter_bytes": 4210688,
+  "adapter_sha256": "6ac5f94c6db6060168e196a4cf6709288c34da54bb719ab2b7b120c196222715",
+  "capture_sha256": {
+    "teacher": "8408c06bab2c3daa46cd4d9a6d95cb93abbcc40384719867785d3f2a82957a83",
+    "student": "b7ec2572392fbb646245689bd6cb85adf3a10a139123df6f282de861744de026"
+  },
+  "fit_source_sha256": "633a645066c9047672b6ce779a89ec9b8a6e2558ab0b116473d0c7a5cb696ac8",
+  "runtime_relative_rmse": 0.00031396668574174176
+}

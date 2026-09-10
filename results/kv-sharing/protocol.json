@@ -1,0 +1,15 @@
+{
+  "training_prompt": "data/shakespeare.txt",
+  "training_tokens": 2048,
+  "fit_tokens": 1536,
+  "selection_tokens": 512,
+  "validation_prompt": "data/technical.txt",
+  "validation_tokens": 4096,
+  "source_layer": 3,
+  "target_layer": 7,
+  "cache_type": "f16",
+  "moba": false,
+  "adapter": "Independent 256x256 affine attention-output map per query head, before the existing gate; original model weights frozen",
+  "training": "Vulkan computes covariance matrices; CPU solves regularized normal equations and scores four ridge candidates",
+  "scope": "One shared pair, one calibration passage and one separate validation passage; no full-model backpropagation or CED conversion"
+}

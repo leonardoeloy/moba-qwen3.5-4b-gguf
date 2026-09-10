@@ -1,0 +1,18 @@
+{
+  "tokens": 32768,
+  "prompt": "data/code.txt",
+  "stride": 32,
+  "generate": 64,
+  "topk": 32,
+  "dense_tail": 2,
+  "types": [
+    "f16",
+    "q4_0"
+  ],
+  "quality_gates": {
+    "ppl_ratio_max": 1.02,
+    "continuation_agreement_min": 0.95
+  },
+  "timing": "One pass per configuration; synchronized scored prefill and decode, no profiling; all configurations use the same context allocation",
+  "scope": "Exploratory fixed-policy comparison, no statistical equivalence or general capability claim"
+}

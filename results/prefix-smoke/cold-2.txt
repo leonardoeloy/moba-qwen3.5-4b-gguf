@@ -1,0 +1,1 @@
+A critical numerical edge case in this code is **division by zero** when the maximum absolute value (`amax`) or the range (`max - min`) of the

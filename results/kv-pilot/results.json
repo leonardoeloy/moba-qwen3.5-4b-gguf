@@ -1,0 +1,41 @@
+{
+  "scope": "Fixed top-32/two-dense-tail MoBA with cache precision varied; 4K technical passage, 256 samples, 64 teacher-forced continuation tokens. The preceding two 2K code smoke checks use the historical compact top16-tail2 continuation, which matches the dense tokens.",
+  "trials": [
+    {
+      "name": "f16-dense-4k",
+      "prefill_s": 41.325004104,
+      "decode_tps": 5.91757111438,
+      "kv_mib": 144.0,
+      "ppl_ratio": 1.0,
+      "continuation_matches": 64,
+      "natural_argmax_matches": 256
+    },
+    {
+      "name": "f16-moba-4k",
+      "prefill_s": 41.166521752,
+      "decode_tps": 5.7666912953,
+      "kv_mib": 144.0,
+      "ppl_ratio": 0.9958139638269381,
+      "continuation_matches": 64,
+      "natural_argmax_matches": 251
+    },
+    {
+      "name": "q8_0-moba-4k",
+      "prefill_s": 45.091669768,
+      "decode_tps": 5.59091152248,
+      "kv_mib": 76.5,
+      "ppl_ratio": 0.9972015761184602,
+      "continuation_matches": 64,
+      "natural_argmax_matches": 251
+    },
+    {
+      "name": "q4_0-moba-4k",
+      "prefill_s": 43.660490556,
+      "decode_tps": 5.59072850483,
+      "kv_mib": 40.5,
+      "ppl_ratio": 0.9959889852844948,
+      "continuation_matches": 64,
+      "natural_argmax_matches": 248
+    }
+  ]
+}

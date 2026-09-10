@@ -1,0 +1,13 @@
+{
+  "q4_ppl_ratio_paired_position_bootstrap_95": [
+    1.001590878651093,
+    1.0229816137401606
+  ],
+  "bootstrap_samples": 2000,
+  "seed": 7,
+  "scope": "Post-run paired resampling of the 512 scored positions. Sequence correlation and generalization are not addressed; this is not a model-quality equivalence test.",
+  "kv_reduction": 3.5555555555555554,
+  "kv_mib_saved": 747.5,
+  "kv_plus_workspace_mib_saved_vs_dense": 646.24,
+  "kv_plus_workspace_mib_saved_vs_moba_f16": 627.48
+}

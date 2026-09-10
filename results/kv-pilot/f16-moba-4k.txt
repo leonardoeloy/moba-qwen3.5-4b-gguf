@@ -1,0 +1,3 @@
+>(env: LLAMA_ARG_LOG_PREFIX) |
+| `--log-time, --no-log-time` | Enable timestamp in log messages<br/>(env: LLAMA_ARG_LOG_TIME) |
+| `--log-time-format FORMAT` | Set the timestamp format. Default: %Y-%m-%d %
