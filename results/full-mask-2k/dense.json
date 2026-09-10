@@ -1,0 +1,50 @@
+{
+  "returncode": 0,
+  "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":18.827999319,\"prefill_wall_s\":18.907690184,\"samples\":32,\"nll\":0.494693102525,\"decode_steps\":32,\"decode_s\":5.318119485,\"decode_tps\":6.01716454289,\"continuation_nll\":0.0541622600469,\"continuation_matches\":32}\n",
+  "prompt_tokens": 2048,
+  "prefill_s": 18.827999319,
+  "prefill_wall_s": 18.907690184,
+  "samples": 32,
+  "nll": 0.494693102525,
+  "decode_steps": 32,
+  "decode_s": 5.318119485,
+  "decode_tps": 6.01716454289,
+  "continuation_nll": 0.0541622600469,
+  "continuation_matches": 32,
+  "elapsed_s": 25.811704804189503,
+  "command": [
+    "/home/maxi/moba/bin/bench",
+    "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+    "data/code.txt",
+    "2048",
+    "results/full-mask-2k/dense",
+    "32",
+    "32",
+    "-"
+  ],
+  "environment": {
+    "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+    "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+  },
+  "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+  "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+  "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+  "dependencies": {
+    "llama_cpp": {
+      "url": "https://github.com/ggml-org/llama.cpp.git",
+      "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+      "patch": "patches/moba.patch"
+    },
+    "model": {
+      "repo": "unsloth/Qwen3.5-4B-GGUF",
+      "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+      "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+      "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+      "size": 2740937888
+    },
+    "base_model": {
+      "repo": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+    }
+  }
+}

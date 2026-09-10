@@ -1,0 +1,456 @@
+[
+  {
+    "returncode": 0,
+    "stdout": "{\"prompt_tokens\":32768,\"prefill_s\":745.920555412,\"prefill_wall_s\":746.963010276,\"samples\":512,\"nll\":0.158058427658,\"decode_steps\":64,\"decode_s\":14.132287837,\"decode_tps\":4.52863688726,\"continuation_nll\":0.0228662927052,\"continuation_matches\":64}\n",
+    "prompt_tokens": 32768,
+    "prefill_s": 745.920555412,
+    "prefill_wall_s": 746.963010276,
+    "samples": 512,
+    "nll": 0.158058427658,
+    "decode_steps": 64,
+    "decode_s": 14.132287837,
+    "decode_tps": 4.52863688726,
+    "continuation_nll": 0.0228662927052,
+    "continuation_matches": 64,
+    "elapsed_s": 780.1411940248217,
+    "command": [
+      "/home/maxi/moba/bin/bench",
+      "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+      "data/code.txt",
+      "32768",
+      "results/validation-32k/dense",
+      "64",
+      "32",
+      "-"
+    ],
+    "environment": {
+      "MOBA": "0",
+      "MOBA_TOPK": "32",
+      "MOBA_DENSE_LAYERS": "2",
+      "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+      "GGML_VK_SERIALIZE_SUBMISSIONS": "1",
+      "BENCH_PROFILE": "1"
+    },
+    "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+    "source_sha256": "7d7384273a11a8cc16184d2324dde7d038dc2a262bbe9cf507153849e5391f72",
+    "vendor_diff_sha256": "6a4664fdfb4db9511692b79a7843d9498a0f37b6dd866cbf8c5319d3eed2cf62",
+    "moba_sha256": "6b7a946a3cce1ac4e070ff116246f6891ea50a748f3e9826c76237b4cdcbc554",
+    "dependencies": {
+      "llama_cpp": {
+        "url": "https://github.com/ggml-org/llama.cpp.git",
+        "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+        "patch": "patches/moba.patch"
+      },
+      "model": {
+        "repo": "unsloth/Qwen3.5-4B-GGUF",
+        "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+        "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+        "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+        "size": 2740937888
+      },
+      "base_model": {
+        "repo": "Qwen/Qwen3.5-4B",
+        "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+      }
+    },
+    "name": "dense",
+    "profile": {
+      "operators": {
+        "ADD": {
+          "calls": 88,
+          "us": 21759.6
+        },
+        "CONCAT": {
+          "calls": 24,
+          "us": 18361.4
+        },
+        "CONT": {
+          "calls": 8,
+          "us": 2308.33
+        },
+        "CPY": {
+          "calls": 48,
+          "us": 8187.68
+        },
+        "FLASH_ATTN_EXT dst(256,16,256,1),  q(256,256,16,1),  k(256,33280,4,1),  v(256,33280,4,1),  m(33280,256,1,1)": {
+          "calls": 8,
+          "us": 7531650.0
+        },
+        "GATED_DELTA_NET": {
+          "calls": 24,
+          "us": 629352.0
+        },
+        "GET_ROWS": {
+          "calls": 49,
+          "us": 7157.43
+        },
+        "GLU": {
+          "calls": 32,
+          "us": 30606.5
+        },
+        "MUL_MAT q4_K m=1024 n=256 k=2560": {
+          "calls": 11,
+          "us": 10248.9
+        },
+        "MUL_MAT q4_K m=2560 n=256 k=4096": {
+          "calls": 8,
+          "us": 24180.9
+        },
+        "MUL_MAT q4_K m=2560 n=256 k=9216": {
+          "calls": 16,
+          "us": 104502.0
+        },
+        "MUL_MAT q4_K m=4096 n=256 k=2560": {
+          "calls": 24,
+          "us": 69058.4
+        },
+        "MUL_MAT q4_K m=8192 n=256 k=2560": {
+          "calls": 8,
+          "us": 43377.4
+        },
+        "MUL_MAT q4_K m=9216 n=256 k=2560": {
+          "calls": 64,
+          "us": 390588.0
+        },
+        "MUL_MAT q5_K m=2560 n=256 k=4096": {
+          "calls": 24,
+          "us": 115522.0
+        },
+        "MUL_MAT q5_K m=8192 n=256 k=2560": {
+          "calls": 24,
+          "us": 233568.0
+        },
+        "MUL_MAT q6_K m=1024 n=256 k=2560": {
+          "calls": 5,
+          "us": 8213.8
+        },
+        "MUL_MAT q6_K m=2560 n=256 k=9216": {
+          "calls": 16,
+          "us": 183194.0
+        },
+        "MUL_MAT q8_0 m=32 n=256 k=2560": {
+          "calls": 48,
+          "us": 29730.8
+        },
+        "MUL_MAT_VEC q6_K m=248320 n=1 k=2560": {
+          "calls": 1,
+          "us": 17813.2
+        },
+        "RMS_NORM(128,16,256,1)": {
+          "calls": 48,
+          "us": 42822.9
+        },
+        "RMS_NORM_MUL RMS_NORM(128,32,256,1)": {
+          "calls": 24,
+          "us": 41987.8
+        },
+        "RMS_NORM_MUL RMS_NORM(256,16,256,1)": {
+          "calls": 8,
+          "us": 7943.54
+        },
+        "RMS_NORM_MUL RMS_NORM(256,4,256,1)": {
+          "calls": 8,
+          "us": 2967.6
+        },
+        "RMS_NORM_MUL RMS_NORM(2560,256,1,1)": {
+          "calls": 65,
+          "us": 15300.7
+        },
+        "ROPE": {
+          "calls": 8,
+          "us": 2316.4
+        },
+        "ROPE_VIEW_SET_ROWS ROPE": {
+          "calls": 8,
+          "us": 974.945
+        },
+        "SCALE": {
+          "calls": 48,
+          "us": 7231.28
+        },
+        "SET_ROWS": {
+          "calls": 8,
+          "us": 1656.82
+        },
+        "SIGMOID": {
+          "calls": 24,
+          "us": 2930.25
+        },
+        "SIGMOID_MUL SIGMOID": {
+          "calls": 8,
+          "us": 2609.11
+        },
+        "SILU_MUL SILU": {
+          "calls": 24,
+          "us": 6951.6
+        },
+        "SOFTPLUS_MUL SOFTPLUS": {
+          "calls": 24,
+          "us": 2349.62
+        },
+        "SSM_CONV_SILU SSM_CONV": {
+          "calls": 24,
+          "us": 51433.6
+        }
+      },
+      "total_operator_us": 9668856.505
+    }
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"prompt_tokens\":32768,\"prefill_s\":491.989677553,\"prefill_wall_s\":493.03430165,\"samples\":512,\"nll\":0.165450065209,\"decode_steps\":64,\"decode_s\":14.128192871,\"decode_tps\":4.52994948359,\"continuation_nll\":0.0225898577614,\"continuation_matches\":64}\n",
+    "prompt_tokens": 32768,
+    "prefill_s": 491.989677553,
+    "prefill_wall_s": 493.03430165,
+    "samples": 512,
+    "nll": 0.165450065209,
+    "decode_steps": 64,
+    "decode_s": 14.128192871,
+    "decode_tps": 4.52994948359,
+    "continuation_nll": 0.0225898577614,
+    "continuation_matches": 64,
+    "elapsed_s": 521.6249094009399,
+    "command": [
+      "/home/maxi/moba/bin/bench",
+      "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+      "data/code.txt",
+      "32768",
+      "results/validation-32k/moba",
+      "64",
+      "32",
+      "results/validation-32k/dense.tokens"
+    ],
+    "environment": {
+      "MOBA": "1",
+      "MOBA_TOPK": "32",
+      "MOBA_DENSE_LAYERS": "2",
+      "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+      "GGML_VK_SERIALIZE_SUBMISSIONS": "1",
+      "BENCH_PROFILE": "1"
+    },
+    "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+    "source_sha256": "7d7384273a11a8cc16184d2324dde7d038dc2a262bbe9cf507153849e5391f72",
+    "vendor_diff_sha256": "6a4664fdfb4db9511692b79a7843d9498a0f37b6dd866cbf8c5319d3eed2cf62",
+    "moba_sha256": "6b7a946a3cce1ac4e070ff116246f6891ea50a748f3e9826c76237b4cdcbc554",
+    "dependencies": {
+      "llama_cpp": {
+        "url": "https://github.com/ggml-org/llama.cpp.git",
+        "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+        "patch": "patches/moba.patch"
+      },
+      "model": {
+        "repo": "unsloth/Qwen3.5-4B-GGUF",
+        "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+        "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+        "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+        "size": 2740937888
+      },
+      "base_model": {
+        "repo": "Qwen/Qwen3.5-4B",
+        "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+      }
+    },
+    "name": "moba",
+    "profile": {
+      "operators": {
+        "ABS": {
+          "calls": 6,
+          "us": 665.154
+        },
+        "ADD": {
+          "calls": 100,
+          "us": 25506.2
+        },
+        "ARANGE": {
+          "calls": 6,
+          "us": 589.842
+        },
+        "CONCAT": {
+          "calls": 24,
+          "us": 19442.6
+        },
+        "CONT": {
+          "calls": 14,
+          "us": 10438.6
+        },
+        "CPY": {
+          "calls": 60,
+          "us": 18133.2
+        },
+        "EXP": {
+          "calls": 6,
+          "us": 10927.1
+        },
+        "FILL": {
+          "calls": 12,
+          "us": 2773.59
+        },
+        "FLASH_ATTN_EXT dst(256,16,256,1),  q(256,256,16,1),  k(256,33280,4,1),  v(256,33280,4,1),  m(33280,256,1,1)": {
+          "calls": 2,
+          "us": 1864240.0
+        },
+        "FLASH_ATTN_EXT dst(256,16,256,1),  q(256,256,16,1),  k(256,33280,4,1),  v(256,33280,4,1),  m(520,256,16,1)": {
+          "calls": 6,
+          "us": 906117.0
+        },
+        "FLOOR": {
+          "calls": 6,
+          "us": 23.175
+        },
+        "GATED_DELTA_NET": {
+          "calls": 24,
+          "us": 603396.0
+        },
+        "GET_ROWS": {
+          "calls": 49,
+          "us": 8683.78
+        },
+        "GLU": {
+          "calls": 32,
+          "us": 28479.9
+        },
+        "LOG": {
+          "calls": 6,
+          "us": 3037.45
+        },
+        "MUL": {
+          "calls": 6,
+          "us": 1470.15
+        },
+        "MUL_MAT f32 m=520 n=256 k=256 batch=16": {
+          "calls": 6,
+          "us": 19949.1
+        },
+        "MUL_MAT q4_K m=1024 n=256 k=2560": {
+          "calls": 11,
+          "us": 9734.79
+        },
+        "MUL_MAT q4_K m=2560 n=256 k=4096": {
+          "calls": 8,
+          "us": 23938.9
+        },
+        "MUL_MAT q4_K m=2560 n=256 k=9216": {
+          "calls": 16,
+          "us": 102626.0
+        },
+        "MUL_MAT q4_K m=4096 n=256 k=2560": {
+          "calls": 24,
+          "us": 68548.0
+        },
+        "MUL_MAT q4_K m=8192 n=256 k=2560": {
+          "calls": 8,
+          "us": 44010.1
+        },
+        "MUL_MAT q4_K m=9216 n=256 k=2560": {
+          "calls": 64,
+          "us": 389876.0
+        },
+        "MUL_MAT q5_K m=2560 n=256 k=4096": {
+          "calls": 24,
+          "us": 116934.0
+        },
+        "MUL_MAT q5_K m=8192 n=256 k=2560": {
+          "calls": 24,
+          "us": 233693.0
+        },
+        "MUL_MAT q6_K m=1024 n=256 k=2560": {
+          "calls": 5,
+          "us": 8226.35
+        },
+        "MUL_MAT q6_K m=2560 n=256 k=9216": {
+          "calls": 16,
+          "us": 184878.0
+        },
+        "MUL_MAT q8_0 m=32 n=256 k=2560": {
+          "calls": 48,
+          "us": 30204.1
+        },
+        "MUL_MAT_VEC q6_K m=248320 n=1 k=2560": {
+          "calls": 1,
+          "us": 18094.1
+        },
+        "POOL_2D": {
+          "calls": 6,
+          "us": 17010.7
+        },
+        "REPEAT": {
+          "calls": 12,
+          "us": 339.473
+        },
+        "RMS_NORM(128,16,256,1)": {
+          "calls": 48,
+          "us": 41795.1
+        },
+        "RMS_NORM_MUL RMS_NORM(128,32,256,1)": {
+          "calls": 24,
+          "us": 42047.6
+        },
+        "RMS_NORM_MUL RMS_NORM(256,16,256,1)": {
+          "calls": 8,
+          "us": 7391.25
+        },
+        "RMS_NORM_MUL RMS_NORM(256,4,256,1)": {
+          "calls": 8,
+          "us": 3010.72
+        },
+        "RMS_NORM_MUL RMS_NORM(2560,256,1,1)": {
+          "calls": 65,
+          "us": 16606.8
+        },
+        "ROPE": {
+          "calls": 8,
+          "us": 1704.37
+        },
+        "ROPE_VIEW_SET_ROWS ROPE": {
+          "calls": 8,
+          "us": 1608.33
+        },
+        "SCALE": {
+          "calls": 72,
+          "us": 72986.9
+        },
+        "SET_ROWS": {
+          "calls": 14,
+          "us": 3069.58
+        },
+        "SIGMOID": {
+          "calls": 30,
+          "us": 3684.16
+        },
+        "SIGMOID_MUL SIGMOID": {
+          "calls": 2,
+          "us": 912.707
+        },
+        "SILU_MUL SILU": {
+          "calls": 24,
+          "us": 7575.62
+        },
+        "SOFTPLUS_MUL SOFTPLUS": {
+          "calls": 24,
+          "us": 2142.65
+        },
+        "SSM_CONV_SILU SSM_CONV": {
+          "calls": 24,
+          "us": 51885.9
+        },
+        "STEP": {
+          "calls": 18,
+          "us": 2235.1
+        },
+        "SUB": {
+          "calls": 12,
+          "us": 932.442
+        },
+        "SUM_ROWS": {
+          "calls": 6,
+          "us": 5826.19
+        },
+        "TOP_K K=32 (520,256,16,1)": {
+          "calls": 6,
+          "us": 13617.0
+        }
+      },
+      "total_operator_us": 5051018.773
+    }
+  }
+]

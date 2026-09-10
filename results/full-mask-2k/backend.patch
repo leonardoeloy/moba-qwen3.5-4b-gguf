@@ -1,0 +1,18 @@
+diff --git a/src/llama-graph.cpp b/src/llama-graph.cpp
+index 5855393..2cfe6ff 100644
+--- a/src/llama-graph.cpp
++++ b/src/llama-graph.cpp
+@@ -1,4 +1,5 @@
+ #include "llama-graph.h"
++#include "../../../src/moba.h"
+ 
+ #include "llama-impl.h"
+ #include "llama-model.h"
+@@ -2629,6 +2630,7 @@ ggml_tensor * llm_graph_context::build_attn_mha(
+             v = ggml_cast(ctx0, v, GGML_TYPE_F16);
+         }
+ 
++        if (hparams.n_layer() == 32 && q->ne[0] == 256 && q->ne[2] == 16) kq_mask = moba_mask(ctx0, q, k, kq_mask, il);
+         cur = ggml_flash_attn_ext(ctx0, q, k, v, kq_mask, kq_scale, hparams.f_max_alibi_bias,
+                                   hparams.attn_soft_cap ? hparams.f_attn_logit_softcapping : 0.0f);
+         res->add_fused_node({LLM_FUSED_OP_FLASH_ATTN, cur, il});

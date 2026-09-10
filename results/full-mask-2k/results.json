@@ -1,0 +1,311 @@
+{
+  "selected": "top8-tail2",
+  "selected_options": {
+    "MOBA": "1",
+    "MOBA_TOPK": "8",
+    "MOBA_DENSE_LAYERS": "2"
+  },
+  "trials": [
+    {
+      "returncode": 0,
+      "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":18.827999319,\"prefill_wall_s\":18.907690184,\"samples\":32,\"nll\":0.494693102525,\"decode_steps\":32,\"decode_s\":5.318119485,\"decode_tps\":6.01716454289,\"continuation_nll\":0.0541622600469,\"continuation_matches\":32}\n",
+      "prompt_tokens": 2048,
+      "prefill_s": 18.827999319,
+      "prefill_wall_s": 18.907690184,
+      "samples": 32,
+      "nll": 0.494693102525,
+      "decode_steps": 32,
+      "decode_s": 5.318119485,
+      "decode_tps": 6.01716454289,
+      "continuation_nll": 0.0541622600469,
+      "continuation_matches": 32,
+      "elapsed_s": 25.811704804189503,
+      "command": [
+        "/home/maxi/moba/bin/bench",
+        "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+        "data/code.txt",
+        "2048",
+        "results/full-mask-2k/dense",
+        "32",
+        "32",
+        "-"
+      ],
+      "environment": {
+        "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+        "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+      },
+      "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+      "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+      "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+      "dependencies": {
+        "llama_cpp": {
+          "url": "https://github.com/ggml-org/llama.cpp.git",
+          "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+          "patch": "patches/moba.patch"
+        },
+        "model": {
+          "repo": "unsloth/Qwen3.5-4B-GGUF",
+          "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+          "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "size": 2740937888
+        },
+        "base_model": {
+          "repo": "Qwen/Qwen3.5-4B",
+          "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+        }
+      },
+      "name": "dense",
+      "options": {},
+      "speedup": 1.0,
+      "ppl_ratio": 1.0,
+      "agreement": 1.0,
+      "passes_calibration": true
+    },
+    {
+      "returncode": 0,
+      "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":19.070950126,\"prefill_wall_s\":19.129049175,\"samples\":32,\"nll\":0.508749997974,\"decode_steps\":32,\"decode_s\":5.312570457,\"decode_tps\":6.0234495258,\"continuation_nll\":0.0582183552906,\"continuation_matches\":31}\n",
+      "prompt_tokens": 2048,
+      "prefill_s": 19.070950126,
+      "prefill_wall_s": 19.129049175,
+      "samples": 32,
+      "nll": 0.508749997974,
+      "decode_steps": 32,
+      "decode_s": 5.312570457,
+      "decode_tps": 6.0234495258,
+      "continuation_nll": 0.0582183552906,
+      "continuation_matches": 31,
+      "elapsed_s": 25.948063369840384,
+      "command": [
+        "/home/maxi/moba/bin/bench",
+        "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+        "data/code.txt",
+        "2048",
+        "results/full-mask-2k/top8-tail2",
+        "32",
+        "32",
+        "results/full-mask-2k/dense.tokens"
+      ],
+      "environment": {
+        "MOBA": "1",
+        "MOBA_TOPK": "8",
+        "MOBA_DENSE_LAYERS": "2",
+        "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+        "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+      },
+      "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+      "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+      "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+      "dependencies": {
+        "llama_cpp": {
+          "url": "https://github.com/ggml-org/llama.cpp.git",
+          "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+          "patch": "patches/moba.patch"
+        },
+        "model": {
+          "repo": "unsloth/Qwen3.5-4B-GGUF",
+          "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+          "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "size": 2740937888
+        },
+        "base_model": {
+          "repo": "Qwen/Qwen3.5-4B",
+          "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+        }
+      },
+      "name": "top8-tail2",
+      "options": {
+        "MOBA": "1",
+        "MOBA_TOPK": "8",
+        "MOBA_DENSE_LAYERS": "2"
+      },
+      "speedup": 0.9872606867830472,
+      "ppl_ratio": 1.01415615816704,
+      "agreement": 0.96875,
+      "passes_calibration": true
+    },
+    {
+      "returncode": 0,
+      "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":19.24744269,\"prefill_wall_s\":19.31643862,\"samples\":32,\"nll\":0.484799531979,\"decode_steps\":32,\"decode_s\":5.409591967,\"decode_tps\":5.91541842623,\"continuation_nll\":0.0543114359719,\"continuation_matches\":32}\n",
+      "prompt_tokens": 2048,
+      "prefill_s": 19.24744269,
+      "prefill_wall_s": 19.31643862,
+      "samples": 32,
+      "nll": 0.484799531979,
+      "decode_steps": 32,
+      "decode_s": 5.409591967,
+      "decode_tps": 5.91541842623,
+      "continuation_nll": 0.0543114359719,
+      "continuation_matches": 32,
+      "elapsed_s": 26.279497942188755,
+      "command": [
+        "/home/maxi/moba/bin/bench",
+        "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+        "data/code.txt",
+        "2048",
+        "results/full-mask-2k/top16-tail2",
+        "32",
+        "32",
+        "results/full-mask-2k/dense.tokens"
+      ],
+      "environment": {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "2",
+        "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+        "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+      },
+      "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+      "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+      "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+      "dependencies": {
+        "llama_cpp": {
+          "url": "https://github.com/ggml-org/llama.cpp.git",
+          "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+          "patch": "patches/moba.patch"
+        },
+        "model": {
+          "repo": "unsloth/Qwen3.5-4B-GGUF",
+          "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+          "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "size": 2740937888
+        },
+        "base_model": {
+          "repo": "Qwen/Qwen3.5-4B",
+          "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+        }
+      },
+      "name": "top16-tail2",
+      "options": {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "2"
+      },
+      "speedup": 0.978207838944863,
+      "ppl_ratio": 0.9901552098198662,
+      "agreement": 1.0,
+      "passes_calibration": true
+    },
+    {
+      "returncode": 0,
+      "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":19.138679922,\"prefill_wall_s\":19.210181109,\"samples\":32,\"nll\":0.4862844703,\"decode_steps\":32,\"decode_s\":5.356926056,\"decode_tps\":5.97357508121,\"continuation_nll\":0.0543413390418,\"continuation_matches\":32}\n",
+      "prompt_tokens": 2048,
+      "prefill_s": 19.138679922,
+      "prefill_wall_s": 19.210181109,
+      "samples": 32,
+      "nll": 0.4862844703,
+      "decode_steps": 32,
+      "decode_s": 5.356926056,
+      "decode_tps": 5.97357508121,
+      "continuation_nll": 0.0543413390418,
+      "continuation_matches": 32,
+      "elapsed_s": 26.11793219903484,
+      "command": [
+        "/home/maxi/moba/bin/bench",
+        "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+        "data/code.txt",
+        "2048",
+        "results/full-mask-2k/top16-tail4",
+        "32",
+        "32",
+        "results/full-mask-2k/dense.tokens"
+      ],
+      "environment": {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "4",
+        "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+        "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+      },
+      "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+      "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+      "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+      "dependencies": {
+        "llama_cpp": {
+          "url": "https://github.com/ggml-org/llama.cpp.git",
+          "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+          "patch": "patches/moba.patch"
+        },
+        "model": {
+          "repo": "unsloth/Qwen3.5-4B-GGUF",
+          "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+          "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "size": 2740937888
+        },
+        "base_model": {
+          "repo": "Qwen/Qwen3.5-4B",
+          "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+        }
+      },
+      "name": "top16-tail4",
+      "options": {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "4"
+      },
+      "speedup": 0.9837668739815815,
+      "ppl_ratio": 0.9916266214420403,
+      "agreement": 1.0,
+      "passes_calibration": true
+    },
+    {
+      "returncode": 0,
+      "stdout": "{\"prompt_tokens\":2048,\"prefill_s\":18.931105562,\"prefill_wall_s\":18.992112863,\"samples\":32,\"nll\":0.494693102525,\"decode_steps\":32,\"decode_s\":5.47809481,\"decode_tps\":5.8414469099,\"continuation_nll\":0.0541622600469,\"continuation_matches\":32}\n",
+      "prompt_tokens": 2048,
+      "prefill_s": 18.931105562,
+      "prefill_wall_s": 18.992112863,
+      "samples": 32,
+      "nll": 0.494693102525,
+      "decode_steps": 32,
+      "decode_s": 5.47809481,
+      "decode_tps": 5.8414469099,
+      "continuation_nll": 0.0541622600469,
+      "continuation_matches": 32,
+      "elapsed_s": 25.990760392975062,
+      "command": [
+        "/home/maxi/moba/bin/bench",
+        "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+        "data/code.txt",
+        "2048",
+        "results/full-mask-2k/dense-repeat",
+        "32",
+        "32",
+        "results/full-mask-2k/dense.tokens"
+      ],
+      "environment": {
+        "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+        "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+      },
+      "prompt_sha256": "07143d7068936ae46b3c528b2f3d4bbb666e74d88992165716174d243573965d",
+      "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+      "vendor_diff_sha256": "4acd971d04fe39661a06000a75610450e06a300afb3497ae7c0f53e7d98eb6eb",
+      "dependencies": {
+        "llama_cpp": {
+          "url": "https://github.com/ggml-org/llama.cpp.git",
+          "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+          "patch": "patches/moba.patch"
+        },
+        "model": {
+          "repo": "unsloth/Qwen3.5-4B-GGUF",
+          "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+          "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+          "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+          "size": 2740937888
+        },
+        "base_model": {
+          "repo": "Qwen/Qwen3.5-4B",
+          "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+        }
+      },
+      "name": "dense-repeat",
+      "options": {},
+      "speedup": 0.9945536068845888,
+      "ppl_ratio": 1.0,
+      "agreement": 1.0,
+      "passes_calibration": true
+    }
+  ]
+}

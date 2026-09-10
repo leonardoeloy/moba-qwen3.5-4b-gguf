@@ -1,0 +1,54 @@
+{
+  "returncode": 0,
+  "stdout": "{\"prompt_tokens\":4096,\"prefill_s\":40.903799658,\"prefill_wall_s\":41.033234956,\"samples\":64,\"nll\":1.58442034263,\"decode_steps\":64,\"decode_s\":11.518574268,\"decode_tps\":5.55624320432,\"continuation_nll\":0.297861074424,\"continuation_matches\":64}\n",
+  "prompt_tokens": 4096,
+  "prefill_s": 40.903799658,
+  "prefill_wall_s": 41.033234956,
+  "samples": 64,
+  "nll": 1.58442034263,
+  "decode_steps": 64,
+  "decode_s": 11.518574268,
+  "decode_tps": 5.55624320432,
+  "continuation_nll": 0.297861074424,
+  "continuation_matches": 64,
+  "elapsed_s": 54.28546257596463,
+  "command": [
+    "/home/maxi/moba/bin/bench",
+    "/home/maxi/moba/models/Qwen3.5-4B-Q4_K_M.gguf",
+    "data/technical.txt",
+    "4096",
+    "results/validation-4k/moba",
+    "64",
+    "32",
+    "results/validation-4k/dense.tokens"
+  ],
+  "environment": {
+    "MOBA": "1",
+    "MOBA_TOPK": "32",
+    "MOBA_DENSE_LAYERS": "2",
+    "GGML_VK_MAX_NODES_PER_SUBMIT": "8",
+    "GGML_VK_SERIALIZE_SUBMISSIONS": "1"
+  },
+  "prompt_sha256": "4f7b99bd793bda6d44413f8b5fe192b00b0e02cd26ead1f3678efa9996b4bf6b",
+  "source_sha256": "a0a8ff1bee327192586b45e2d1371df61753fe091f97a4e1a24d5cadaa1fc11d",
+  "vendor_diff_sha256": "ffb2f094495bac9d7e8afea6350cf820b90eff8a230067c3f59e98baceb8fbc8",
+  "moba_sha256": "6b7a946a3cce1ac4e070ff116246f6891ea50a748f3e9826c76237b4cdcbc554",
+  "dependencies": {
+    "llama_cpp": {
+      "url": "https://github.com/ggml-org/llama.cpp.git",
+      "commit": "f3f1a8f2760f28325a5ec20c05b171e5b7c83a29",
+      "patch": "patches/moba.patch"
+    },
+    "model": {
+      "repo": "unsloth/Qwen3.5-4B-GGUF",
+      "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+      "filename": "Qwen3.5-4B-Q4_K_M.gguf",
+      "sha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+      "size": 2740937888
+    },
+    "base_model": {
+      "repo": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "trials": [
+    [
+      "dense",
+      {}
+    ],
+    [
+      "top8-tail2",
+      {
+        "MOBA": "1",
+        "MOBA_TOPK": "8",
+        "MOBA_DENSE_LAYERS": "2"
+      }
+    ],
+    [
+      "top16-tail2",
+      {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "2"
+      }
+    ],
+    [
+      "top16-tail4",
+      {
+        "MOBA": "1",
+        "MOBA_TOPK": "16",
+        "MOBA_DENSE_LAYERS": "4"
+      }
+    ],
+    [
+      "dense-repeat",
+      {}
+    ]
+  ],
+  "tokens": 2048,
+  "prompt": "data/code.txt",
+  "samples": "second half, every 32 tokens",
+  "continuation": "32 dense greedy tokens, teacher-forced for all later runs",
+  "gate": "calibration only: perplexity ratio <=1.02 and continuation agreement >=0.95",
+  "selection": "fastest passing sparse trial; not an independent quality claim",
+  "model_weights": "unchanged"
+}

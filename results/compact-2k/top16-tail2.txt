@@ -1,0 +1,4 @@
+f;
+        float max  = 0.0f;
+
+        for (int j = 0; j < qk; j++) {

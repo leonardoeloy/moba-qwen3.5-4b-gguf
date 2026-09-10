@@ -1,0 +1,16 @@
+{
+  "context": 32768,
+  "prompt": "data/code.txt",
+  "topk": 32,
+  "block": 64,
+  "dense_full_attention_layers": 2,
+  "trials": [
+    "dense",
+    "moba"
+  ],
+  "selection": "Same fixed top-32 policy as the 4K validation, now 32/512 blocks at the end; more aggressive sparsity, no tuning on this run",
+  "quality": "512 natural-target samples in the second half, stride 32; up to 64 dense teacher-forced continuation tokens",
+  "profiling": "One extra aligned 256-token batch after timed prefill/decode, after alignment padding. Vulkan timestamps serialize operations; diagnostic batch is excluded from main prefill/decode timings.",
+  "limitations": "One timed pass per mode, one previously used code passage, scored rather than ordinary prefill, no task benchmark or equivalence claim",
+  "timeout_per_run_s": 2400
+}

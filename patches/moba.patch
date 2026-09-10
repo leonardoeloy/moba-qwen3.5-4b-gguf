@@ -1,0 +1,289 @@
+diff --git a/ggml/src/ggml-vulkan/ggml-vulkan.cpp b/ggml/src/ggml-vulkan/ggml-vulkan.cpp
+index 8f37f65..c8e1c8c 100644
+--- a/ggml/src/ggml-vulkan/ggml-vulkan.cpp
++++ b/ggml/src/ggml-vulkan/ggml-vulkan.cpp
+@@ -1138,6 +1138,7 @@ struct vk_device_struct {
+     vk_pipeline pipeline_snake_bf16;
+     vk_pipeline pipeline_pool1d_f32;
+     vk_pipeline pipeline_pool2d_f32;
++    vk_pipeline pipeline_pool2d_f16;
+     vk_pipeline pipeline_rwkv_wkv6_f32;
+     vk_pipeline pipeline_rwkv_wkv7_f32;
+     vk_pipeline pipeline_gated_linear_attn_f32;
+@@ -2187,6 +2188,8 @@ struct vk_op_flash_attn_mask_opt_push_constants {
+     uint32_t nbd1;
+     uint32_t nbd2;
+     uint32_t nbd3;
++    uint32_t compact_blocks;
++    uint32_t mask_group;
+ };
+ 
+ // Allow pre-recording command buffers
+@@ -6134,6 +6137,7 @@ static void ggml_vk_load_shaders(vk_device& device, vk_pipeline requested) {
+ 
+     ggml_vk_create_pipeline(device, device->pipeline_pool1d_f32, "pool1d_f32", pool1d_f32_len, pool1d_f32_data, "main", 2, sizeof(vk_op_pool1d_push_constants), {512, 1, 1}, {}, 1);
+     ggml_vk_create_pipeline(device, device->pipeline_pool2d_f32, "pool2d_f32", pool2d_f32_len, pool2d_f32_data, "main", 2, sizeof(vk_op_pool2d_push_constants), {512, 1, 1}, {}, 1);
++    ggml_vk_create_pipeline(device, device->pipeline_pool2d_f16, "pool2d_f16", pool2d_f16_len, pool2d_f16_data, "main", 2, sizeof(vk_op_pool2d_push_constants), {512, 1, 1}, {}, 1);
+ 
+     ggml_vk_create_pipeline(device, device->pipeline_rwkv_wkv6_f32, "rwkv_wkv6_f32", rwkv_wkv6_f32_len, rwkv_wkv6_f32_data, "main", 7, sizeof(vk_op_rwkv_wkv6_push_constants), {1, 1, 1}, {device->subgroup_size}, 1);
+ 
+@@ -11219,6 +11223,13 @@ static void ggml_vk_flash_attn(ggml_backend_vk_context * ctx, vk_context& subctx
+     const uint32_t nem1 = mask ? mask->ne[1] : 0;
+     const uint32_t nem2 = mask ? mask->ne[2] : 0;
+     const uint32_t nem3 = mask ? mask->ne[3] : 0;
++    const bool compact_mask = mask && strcmp(mask->name, "moba_compact_64") == 0;
++    const uint32_t compact_blocks = compact_mask ? (nek1 - nem0) / 63 : 0;
++    if (compact_mask) {
++        GGML_ASSERT(!ctx->device->coopmat_support && !ctx->device->coopmat2);
++        GGML_ASSERT(nek1 > nem0 && (nek1 - nem0) % 63 == 0 && compact_blocks < 65536);
++        GGML_ASSERT(nem1 > 0 && neq1 % nem1 == 0 && compact_blocks * 64 >= neq1 && !sinks);
++    }
+ 
+     const uint32_t HSK = nek0;
+     const uint32_t HSV = nev0;
+@@ -11341,8 +11352,8 @@ static void ggml_vk_flash_attn(ggml_backend_vk_context * ctx, vk_context& subctx
+     }
+ 
+     // Only use mask opt when the mask is fairly large. This hasn't been tuned extensively.
+-    bool use_mask_opt = mask && nem1 >= 32 && nem0 * nem1 > 32768 && nem0 >= tuning_params.block_cols * 16
+-                        && (ctx->device->architecture != vk_device_architecture::AMD_GCN || HSK > 256 || HSV > 256);
++    bool use_mask_opt = compact_mask || (mask && nem1 >= 32 && nem0 * nem1 > 32768 && nem0 >= tuning_params.block_cols * 16
++                        && (ctx->device->architecture != vk_device_architecture::AMD_GCN || HSK > 256 || HSV > 256));
+     vk_fa_pipeline_state fa_pipeline_state = get_fa_pipeline_state(ctx->device, tuning_params, HSK, HSV, aligned, f32acc,
+                                                                    mask != nullptr, use_mask_opt, logit_softcap != 0, k_type_eff, v_type_eff);
+ 
+@@ -11408,8 +11419,10 @@ static void ggml_vk_flash_attn(ggml_backend_vk_context * ctx, vk_context& subctx
+         ggml_vk_preallocate_buffers(ctx, subctx);
+     }
+ 
+-    const uint32_t mask_opt_num_dwords = CEIL_DIV(nem0, 16 * Bc);
+-    const uint64_t mask_opt_size = sizeof(uint32_t) * mask_opt_num_dwords * CEIL_DIV(nem1, Br) * nem2 * nem3;
++    const uint32_t mask_opt_rows = compact_mask ? N : nem1;
++    const uint32_t mask_opt_cols = compact_mask ? KV : nem0;
++    const uint32_t mask_opt_num_dwords = CEIL_DIV(mask_opt_cols, 16 * Bc);
++    const uint64_t mask_opt_size = sizeof(uint32_t) * mask_opt_num_dwords * CEIL_DIV(mask_opt_rows, Br) * nem2 * nem3;
+ 
+     vk_pipeline pipeline_fa_mask_opt = nullptr;
+     if (use_mask_opt) {
+@@ -11477,24 +11490,30 @@ static void ggml_vk_flash_attn(ggml_backend_vk_context * ctx, vk_context& subctx
+     }
+ 
+     uint32_t mask_n_head_log2 = ((sinks != nullptr) << 24) | n_head_log2;
++    if (compact_mask) {
++        GGML_ASSERT(max_bias == 0 && gqa_ratio == 1);
++        mask_n_head_log2 = (1u << 25) | compact_blocks;
++    }
+ 
+     if (use_mask_opt)
+     {
+         const vk_op_flash_attn_mask_opt_push_constants opt_pc = {
+-            nem0,
+-            nem1,
++            mask_opt_cols,
++            mask_opt_rows,
+             nem2,
+             (uint32_t)(mask->nb[1] / sizeof(ggml_fp16_t)),
+             (uint32_t)(mask->nb[2] / sizeof(ggml_fp16_t)),
+             (uint32_t)(mask->nb[3] / sizeof(ggml_fp16_t)),
+             mask_opt_num_dwords,
+-            mask_opt_num_dwords * CEIL_DIV(nem1, Br),
+-            mask_opt_num_dwords * CEIL_DIV(nem1, Br) * nem2,
++            mask_opt_num_dwords * CEIL_DIV(mask_opt_rows, Br),
++            mask_opt_num_dwords * CEIL_DIV(mask_opt_rows, Br) * nem2,
++            compact_blocks,
++            compact_mask ? N / nem1 : 1,
+         };
+ 
+         ggml_vk_dispatch_pipeline(ctx, subctx, pipeline_fa_mask_opt,
+                                   { mask_buf, mask_opt_buf }, opt_pc,
+-                                  { mask_opt_num_dwords, CEIL_DIV(nem1, Br), nem2 * nem3 });
++                                  { mask_opt_num_dwords, CEIL_DIV(mask_opt_rows, Br), nem2 * nem3 });
+         ggml_vk_sync_buffers(ctx, subctx);
+     }
+ 
+@@ -12095,6 +12114,9 @@ static vk_pipeline ggml_vk_op_get_pipeline(ggml_backend_vk_context * ctx, const
+         }
+         return nullptr;
+     case GGML_OP_POOL_2D:
++        if (src0->type == GGML_TYPE_F16 && dst->type == GGML_TYPE_F32) {
++            return ctx->device->pipeline_pool2d_f16;
++        }
+         if (src0->type == GGML_TYPE_F32 && dst->type == GGML_TYPE_F32) {
+             return ctx->device->pipeline_pool2d_f32;
+         }
+@@ -18091,6 +18113,11 @@ static ggml_status ggml_backend_vk_graph_compute(ggml_backend_t backend, ggml_cg
+     VK_LOG_DEBUG("ggml_backend_vk_graph_compute(" << cgraph->n_nodes << " nodes)");
+     ggml_backend_vk_context * ctx = (ggml_backend_vk_context *)backend->context;
+ 
++    if (!vk_perf_logger_enabled && std::getenv("GGML_VK_PROFILE_NOW")) {
++        vk_perf_logger_enabled = true;
++        ctx->perf_logger = std::make_unique<vk_perf_logger>();
++    }
++
+     ctx->device->diag_cgraph = nullptr;
+     ctx->device->diag_prev_start = -1;
+     ctx->device->diag_prev_end = -1;
+@@ -19724,7 +19751,7 @@ static bool ggml_backend_vk_device_supports_op(ggml_backend_dev_t dev, const ggm
+         case GGML_OP_POOL_1D:
+             return ggml_is_contiguous(op->src[0]) && op->src[0]->type == GGML_TYPE_F32;
+         case GGML_OP_POOL_2D:
+-            return ggml_is_contiguous(op->src[0]) && op->src[0]->type == GGML_TYPE_F32;
++            return ggml_is_contiguous(op->src[0]) && (op->src[0]->type == GGML_TYPE_F32 || op->src[0]->type == GGML_TYPE_F16);
+         case GGML_OP_RWKV_WKV6:
+         case GGML_OP_RWKV_WKV7:
+             return true; // all inputs are contiguous, see ggml.c
+diff --git a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn.comp b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn.comp
+index 0c1b6d0..9e99b3d 100644
+--- a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn.comp
++++ b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn.comp
+@@ -187,9 +187,13 @@ void main() {
+     uint32_t k_offset = (ik2*p.nb12 + ik3*p.nb13) / FaBlockBytesK;
+     uint32_t v_offset = (iv2*p.nb22 + iv3*p.nb23) / FaBlockBytesV;
+     uint32_t m_offset = gqa_iq1*KV;
++    bool compact_mask = (p.mask_n_head_log2 & COMPACT_MASK_BIT) != 0;
++    uint32_t compact_blocks = p.mask_n_head_log2 & N_LOG2_MASK;
++    uint32_t original_kv = compact_blocks * 64;
++    uint32_t mask_width = compact_mask ? KV - compact_blocks * 63 : KV;
+     if (p.nem2 != 1 || p.nem3 != 1) {
+-        m_offset += ((iq3 % p.nem3) * p.nem2 + (iq2 % p.nem2)) * p.nem1 * KV;
+-        mo_offset += ((iq3 % p.nem3) * p.nem2 + (iq2 % p.nem2)) * CEIL_DIV(p.nem1, Br) * mo_stride;
++        m_offset += ((iq3 % p.nem3) * p.nem2 + (iq2 % p.nem2)) * p.nem1 * mask_width;
++        mo_offset += ((iq3 % p.nem3) * p.nem2 + (iq2 % p.nem2)) * CEIL_DIV(compact_mask ? p.N : p.nem1, Br) * mo_stride;
+     }
+ 
+     uint32_t mask_opt = 0;
+@@ -210,7 +214,8 @@ void main() {
+             }
+             // Only load if the block is not all zeros
+             if (mask_opt_bits != MASK_OPT_ALL_ZERO) {
+-                bool nem1_bounds_check = !(p.gqa_ratio > 1) && (p.nem1 % Br) != 0;
++                uint32_t mask_rows = compact_mask ? p.N : p.nem1;
++                bool nem1_bounds_check = !(p.gqa_ratio > 1) && (mask_rows % Br) != 0;
+ 
+                 float max_mask = NEG_FLT_MAX_OVER_2;
+                 barrier();
+@@ -218,8 +223,14 @@ void main() {
+                     uint32_t c = (idx + tid) % Bc;
+                     uint32_t r = (idx + tid) / Bc;
+                     if (idx + tid < Bc * Br) {
+-                        if ((!KV_bounds_check || j * Bc + c < KV) && (!nem1_bounds_check || i * Br + r < p.nem1)) {
+-                            FLOAT_TYPE m = FLOAT_TYPE(data_m[m_offset + (i * Br + r) * m_stride + (j * Bc + c)]);
++                        if ((!KV_bounds_check || j * Bc + c < KV) && (!nem1_bounds_check || i * Br + r < mask_rows)) {
++                            uint32_t qr = i * Br + r;
++                            uint32_t kc = j * Bc + c;
++                            uint32_t mr = compact_mask ? qr / (p.N / p.nem1) : qr;
++                            uint32_t mc = compact_mask ? (kc < original_kv ? kc / 64 : compact_blocks + kc - original_kv) : kc;
++                            uint32_t stride = compact_mask ? mask_width : m_stride;
++                            FLOAT_TYPE m = FLOAT_TYPE(data_m[m_offset + mr * stride + mc]);
++                            if (compact_mask && kc < original_kv && kc > qr + original_kv - p.N) m = FLOAT_TYPE(-1.0 / 0.0);
+                             masksh[c * masksh_stride + r] = m;
+                             max_mask = max(max_mask, float(m));
+                         } else {
+diff --git a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_base.glsl b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_base.glsl
+index 0ce4503..7cabcf4 100644
+--- a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_base.glsl
++++ b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_base.glsl
+@@ -73,6 +73,7 @@ layout (push_constant) uniform parameter {
+ } p;
+ 
+ #define SINK_ENABLE_BIT (1<<24)
++#define COMPACT_MASK_BIT (1<<25)
+ #define N_LOG2_MASK 0xFFFF
+ 
+ layout (binding = 4) readonly buffer S {float data_s[];};
+diff --git a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_mask_opt.comp b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_mask_opt.comp
+index 0e41770..50ef126 100644
+--- a/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_mask_opt.comp
++++ b/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_mask_opt.comp
+@@ -25,6 +25,8 @@ layout (push_constant) uniform parameter {
+     uint nbd1;
+     uint nbd2;
+     uint nbd3;
++    uint compact_blocks;
++    uint mask_group;
+ };
+ 
+ #define MASK_OPT_ALL_NEG_INF 1
+@@ -32,6 +34,7 @@ layout (push_constant) uniform parameter {
+ 
+ shared float minsh[NUM_SUBGROUPS];
+ shared float maxsh[NUM_SUBGROUPS];
++shared uint compactsh[16];
+ 
+ float FLT_MAX_OVER_2 = uintBitsToFloat(0x7EFFFFFF);
+ 
+@@ -104,6 +107,44 @@ void main() {
+     const uint i3 = gl_WorkGroupID.z / nem2;
+ 
+     uint result = 0;
++    if (compact_blocks != 0) {
++        if (tid < 16) {
++            uint ks = (i0 * 16 + tid) * Bc;
++            uint ke = min(ks + Bc, nem0);
++            uint qs = i1 * Br;
++            uint qe = min(qs + Br, nem1);
++            uint original_kv = compact_blocks * 64;
++            uint offset = original_kv - nem1;
++            float lo = FLT_MAX_OVER_2;
++            float hi = -FLT_MAX_OVER_2;
++            for (uint r = qs / mask_group; r < (qe + mask_group - 1) / mask_group; ++r) {
++                uint first_q = max(qs, r * mask_group);
++                uint last_q = min(qe, (r + 1) * mask_group) - 1;
++                for (uint b = ks / 64; b < (min(ke, original_kv) + 63) / 64; ++b) {
++                    float value = float(data_a[b + r * nbm1 + i2 * nbm2 + i3 * nbm3]);
++                    uint first_k = max(ks, b * 64);
++                    uint last_k = min(ke, (b + 1) * 64) - 1;
++                    if (first_k > last_q + offset) value = -FLT_MAX_OVER_2;
++                    lo = min(lo, value);
++                    hi = max(hi, value);
++                    if (last_k > first_q + offset) lo = -FLT_MAX_OVER_2;
++                }
++                for (uint c = max(ks, original_kv); c < ke; ++c) {
++                    float value = float(data_a[compact_blocks + c - original_kv + r * nbm1 + i2 * nbm2 + i3 * nbm3]);
++                    lo = min(lo, value);
++                    hi = max(hi, value);
++                }
++            }
++            uint code = hi <= -FLT_MAX_OVER_2 ? 1 : (lo == 0.0 && hi == 0.0 ? 2 : 0);
++            compactsh[tid] = code << (tid * 2);
++        }
++        barrier();
++        if (tid == 0) {
++            for (uint b = 0; b < 16; ++b) result |= compactsh[b];
++            data_d[i0 + i1 * nbd1 + i2 * nbd2 + i3 * nbd3] = result;
++        }
++        return;
++    }
+ 
+     // Fast path for fully in-bounds blocks where we can do f16vec4 loads
+     if ((nem0 % Bc) == 0 && (nem1 % Br) == 0 &&
+diff --git a/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp b/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp
+index cb1128d..47abd9d 100644
+--- a/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp
++++ b/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp
+@@ -1085,6 +1085,7 @@ void process_shaders() {
+ 
+     string_to_spv("pool1d_f32", "pool1d.comp", merge_maps(base_dict, {{"A_TYPE", "float"}, {"D_TYPE", "float"}}));
+     string_to_spv("pool2d_f32", "pool2d.comp", merge_maps(base_dict, {{"A_TYPE", "float"}, {"D_TYPE", "float"}}));
++    string_to_spv("pool2d_f16", "pool2d.comp", merge_maps(base_dict, {{"A_TYPE", "float16_t"}, {"D_TYPE", "float"}}));
+ 
+     string_to_spv("rwkv_wkv6_f32", "wkv6.comp", merge_maps(base_dict, {{"A_TYPE", "float"}}));
+ 
+diff --git a/src/llama-graph.cpp b/src/llama-graph.cpp
+index 5855393..f8f6fdc 100644
+--- a/src/llama-graph.cpp
++++ b/src/llama-graph.cpp
+@@ -1,4 +1,5 @@
+ #include "llama-graph.h"
++#include "../../../src/moba.h"
+ 
+ #include "llama-impl.h"
+ #include "llama-model.h"
+@@ -2629,6 +2630,7 @@ ggml_tensor * llm_graph_context::build_attn_mha(
+             v = ggml_cast(ctx0, v, GGML_TYPE_F16);
+         }
+ 
++        if (arch == LLM_ARCH_QWEN35 && hparams.n_layer() == 32 && q->ne[0] == 256 && q->ne[2] == 16) kq_mask = moba_mask(ctx0, q, k, kq_mask, il);
+         cur = ggml_flash_attn_ext(ctx0, q, k, v, kq_mask, kq_scale, hparams.f_max_alibi_bias,
+                                   hparams.attn_soft_cap ? hparams.f_attn_logit_softcapping : 0.0f);
+         res->add_fused_node({LLM_FUSED_OP_FLASH_ATTN, cur, il});

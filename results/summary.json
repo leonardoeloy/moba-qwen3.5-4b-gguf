@@ -1,0 +1,60 @@
+{
+  "full-mask-2k": {
+    "dense_prefill_range": [
+      18.827999319,
+      18.931105562
+    ],
+    "fastest_sparse": "top8-tail2",
+    "speedup_vs_fastest_dense": 0.9872606867830472,
+    "meets_new_3_percent_speed_margin": false
+  },
+  "compact-2k": {
+    "dense_prefill_range": [
+      19.00358736,
+      19.953700747
+    ],
+    "fastest_sparse": "top8-tail2",
+    "speedup_vs_fastest_dense": 1.011724583335199,
+    "meets_new_3_percent_speed_margin": false
+  },
+  "validation-4k": {
+    "dense_prefill_range": [
+      40.983728029,
+      41.018384984
+    ],
+    "moba_prefill_s": 40.903799658,
+    "speedup_vs_fastest_dense": 1.001954057365533,
+    "ppl_ratio": 1.0101584004146362,
+    "continuation_agreement": 1.0
+  },
+  "coding": {
+    "dense": {
+      "solved": 2,
+      "tasks": 3,
+      "elapsed_s": 96.4924660618417,
+      "solved_per_hour": 74.61722447206961
+    },
+    "moba": {
+      "solved": 2,
+      "tasks": 3,
+      "elapsed_s": 96.79598718415946,
+      "solved_per_hour": 74.3832488251979
+    }
+  },
+  "conclusion": "Measured 1.52x scored-prefill throughput at 32K on one code passage with approximate attention; no meaningful gain demonstrated at 2K/4K; no model training or FrogNano reproduction",
+  "validation-32k": {
+    "prefill_speedup": 1.5161304991640705,
+    "prefill_time_reduction": 0.3404261700748338,
+    "ppl_ratio": 1.0074190231370352,
+    "paired_bootstrap_ppl_ratio_95": [
+      0.9993453718875489,
+      1.0163607227307352
+    ],
+    "bootstrap_scope": "Paired resampling of sampled positions; does not address sequence correlation or generalization",
+    "natural_argmax_matches": 508,
+    "natural_samples": 512,
+    "continuation_agreement": 1.0,
+    "continuation_nll_delta": -0.00027643494379999897,
+    "decode_tps_ratio": 1.0002898435804586
+  }
+}

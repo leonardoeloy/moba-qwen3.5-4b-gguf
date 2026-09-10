@@ -1,0 +1,8 @@
+* text=auto
+*.npz binary
+*.patch -text
+*.log -text
+*.tsv -text
+*.tokens -text
+*.shape -text
+*.txt -text

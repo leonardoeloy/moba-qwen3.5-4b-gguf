@@ -1,0 +1,224 @@
+{
+  "operators": {
+    "ABS": {
+      "calls": 6,
+      "us": 665.154
+    },
+    "ADD": {
+      "calls": 100,
+      "us": 25506.2
+    },
+    "ARANGE": {
+      "calls": 6,
+      "us": 589.842
+    },
+    "CONCAT": {
+      "calls": 24,
+      "us": 19442.6
+    },
+    "CONT": {
+      "calls": 14,
+      "us": 10438.6
+    },
+    "CPY": {
+      "calls": 60,
+      "us": 18133.2
+    },
+    "EXP": {
+      "calls": 6,
+      "us": 10927.1
+    },
+    "FILL": {
+      "calls": 12,
+      "us": 2773.59
+    },
+    "FLASH_ATTN_EXT dst(256,16,256,1),  q(256,256,16,1),  k(256,33280,4,1),  v(256,33280,4,1),  m(33280,256,1,1)": {
+      "calls": 2,
+      "us": 1864240.0
+    },
+    "FLASH_ATTN_EXT dst(256,16,256,1),  q(256,256,16,1),  k(256,33280,4,1),  v(256,33280,4,1),  m(520,256,16,1)": {
+      "calls": 6,
+      "us": 906117.0
+    },
+    "FLOOR": {
+      "calls": 6,
+      "us": 23.175
+    },
+    "GATED_DELTA_NET": {
+      "calls": 24,
+      "us": 603396.0
+    },
+    "GET_ROWS": {
+      "calls": 49,
+      "us": 8683.78
+    },
+    "GLU": {
+      "calls": 32,
+      "us": 28479.9
+    },
+    "LOG": {
+      "calls": 6,
+      "us": 3037.45
+    },
+    "MUL": {
+      "calls": 6,
+      "us": 1470.15
+    },
+    "MUL_MAT f32 m=520 n=256 k=256 batch=16": {
+      "calls": 6,
+      "us": 19949.1
+    },
+    "MUL_MAT q4_K m=1024 n=256 k=2560": {
+      "calls": 11,
+      "us": 9734.79
+    },
+    "MUL_MAT q4_K m=2560 n=256 k=4096": {
+      "calls": 8,
+      "us": 23938.9
+    },
+    "MUL_MAT q4_K m=2560 n=256 k=9216": {
+      "calls": 16,
+      "us": 102626.0
+    },
+    "MUL_MAT q4_K m=4096 n=256 k=2560": {
+      "calls": 24,
+      "us": 68548.0
+    },
+    "MUL_MAT q4_K m=8192 n=256 k=2560": {
+      "calls": 8,
+      "us": 44010.1
+    },
+    "MUL_MAT q4_K m=9216 n=256 k=2560": {
+      "calls": 64,
+      "us": 389876.0
+    },
+    "MUL_MAT q5_K m=2560 n=256 k=4096": {
+      "calls": 24,
+      "us": 116934.0
+    },
+    "MUL_MAT q5_K m=8192 n=256 k=2560": {
+      "calls": 24,
+      "us": 233693.0
+    },
+    "MUL_MAT q6_K m=1024 n=256 k=2560": {
+      "calls": 5,
+      "us": 8226.35
+    },
+    "MUL_MAT q6_K m=2560 n=256 k=9216": {
+      "calls": 16,
+      "us": 184878.0
+    },
+    "MUL_MAT q8_0 m=32 n=256 k=2560": {
+      "calls": 48,
+      "us": 30204.1
+    },
+    "MUL_MAT_VEC q6_K m=248320 n=1 k=2560": {
+      "calls": 1,
+      "us": 18094.1
+    },
+    "POOL_2D": {
+      "calls": 6,
+      "us": 17010.7
+    },
+    "REPEAT": {
+      "calls": 12,
+      "us": 339.473
+    },
+    "RMS_NORM(128,16,256,1)": {
+      "calls": 48,
+      "us": 41795.1
+    },
+    "RMS_NORM_MUL RMS_NORM(128,32,256,1)": {
+      "calls": 24,
+      "us": 42047.6
+    },
+    "RMS_NORM_MUL RMS_NORM(256,16,256,1)": {
+      "calls": 8,
+      "us": 7391.25
+    },
+    "RMS_NORM_MUL RMS_NORM(256,4,256,1)": {
+      "calls": 8,
+      "us": 3010.72
+    },
+    "RMS_NORM_MUL RMS_NORM(2560,256,1,1)": {
+      "calls": 65,
+      "us": 16606.8
+    },
+    "ROPE": {
+      "calls": 8,
+      "us": 1704.37
+    },
+    "ROPE_VIEW_SET_ROWS ROPE": {
+      "calls": 8,
+      "us": 1608.33
+    },
+    "SCALE": {
+      "calls": 72,
+      "us": 72986.9
+    },
+    "SET_ROWS": {
+      "calls": 14,
+      "us": 3069.58
+    },
+    "SIGMOID": {
+      "calls": 30,
+      "us": 3684.16
+    },
+    "SIGMOID_MUL SIGMOID": {
+      "calls": 2,
+      "us": 912.707
+    },
+    "SILU_MUL SILU": {
+      "calls": 24,
+      "us": 7575.62
+    },
+    "SOFTPLUS_MUL SOFTPLUS": {
+      "calls": 24,
+      "us": 2142.65
+    },
+    "SSM_CONV_SILU SSM_CONV": {
+      "calls": 24,
+      "us": 51885.9
+    },
+    "STEP": {
+      "calls": 18,
+      "us": 2235.1
+    },
+    "SUB": {
+      "calls": 12,
+      "us": 932.442
+    },
+    "SUM_ROWS": {
+      "calls": 6,
+      "us": 5826.19
+    },
+    "TOP_K K=32 (520,256,16,1)": {
+      "calls": 6,
+      "us": 13617.0
+    }
+  },
+  "total_operator_us": 5051018.773,
+  "groups": {
+    "Other kernels": {
+      "seconds": 0.392856053,
+      "fraction": 0.0777775871869641
+    },
+    "Flash-attention kernels": {
+      "seconds": 2.770357,
+      "fraction": 0.5484748967493097
+    },
+    "DeltaNet core": {
+      "seconds": 0.603396,
+      "fraction": 0.11946025685460267
+    },
+    "Matrix multiplies": {
+      "seconds": 1.2507124400000003,
+      "fraction": 0.2476158763625328
+    },
+    "Pooling/top-k/scatter": {
+      "seconds": 0.033697279999999996,
+      "fraction": 0.0066713828465907385
+    }
+  },
+  "scope": "One instrumented 256-token append batch after the timed 32K prefill and decode, at approximately 33K cached tokens. Kernel synchronization differs from ordinary execution; not a whole-prefill time breakdown. Router cost is spread across multiple categories."
+}

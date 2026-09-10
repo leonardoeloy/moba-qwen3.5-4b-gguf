@@ -1,0 +1,13 @@
+{
+  "context": 4096,
+  "prompt": "data/technical.txt",
+  "topk": 32,
+  "dense_full_attention_layers": 2,
+  "selection": "Frozen before running: retain the top-16/32-block terminal fraction from the 2K calibration",
+  "trials": [
+    "dense",
+    "moba",
+    "dense-repeat"
+  ],
+  "scope": "One new passage, 64 sampled natural targets, 64 teacher-forced continuation tokens; not a general quality benchmark"
+}
