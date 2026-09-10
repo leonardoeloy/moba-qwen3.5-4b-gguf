@@ -132,3 +132,9 @@ The checkpoint occupied **339.13 MiB**, with **0.334 s** save plus fsync and app
 All four restored runs matched their own recomputed prompt tokens, 32 generated tokens, and all 7,946,240 checked vocabulary logits exactly: **31,784,960 logits, zero bitwise mismatches**. This establishes observed checkpoint fidelity relative to MoBA/Q4_0, not equivalence to dense FP16 or answer correctness. New prefixes still pay full prefill. Active KV allocation is unchanged; saved files consume additional storage. Initial experiment fingerprinting/manifest publication are excluded, and complete-process times include instrumentation. One prefix and three short questions do not establish production hit rates or statistical performance guarantees.
 
 [Results](results/prefix-32k/results.json), [amortization](results/prefix-32k/analysis.json), [2K smoke](results/prefix-smoke/results.json), [setup, timing definitions, and diagram analysis](docs/PREFIX_CACHE.md).
+
+## Leaf-inspired local repair pilot
+
+The five-tool harness ran two handcrafted tasks under two configurations, using the existing Qwen3.5 MoBA/Q4_0 model without weight updates. The original four-turn configuration produced 1/2 passing patches and no natural finishes in 187.99 seconds. A follow-up with a concise-tool instruction and six-turn limit produced 1/2 passing patches and one natural finish in 174.86 seconds. Both interval-repair attempts hit the 256-token generation cap without editing; both signed-duration patches passed seven grading cases.
+
+This demonstrates one naturally completed local repair, not improved solve rate, a measured MoBA acceleration, a TaskPilot curriculum or RL. Tasks are handcrafted and related to prior smoke fixtures. Grading cases were hidden during interaction but are included in the release. Both prompt and turn budget changed, and timings are single observations. [Full method and results](docs/LEAF_PILOT.md).

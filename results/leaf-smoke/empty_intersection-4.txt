@@ -1,0 +1,12 @@
+The current implementation `return a < d and c < b` is incorrect for empty half-open intervals. For half-open intervals [a,b) and [c,d), they overlap if and only if `a < d and c < b`. However, the issue is that when intervals are empty (i.e., `a == b` or `c == d`), the function should return `False`.
+
+Let me verify:
+- Empty interval [a,a) has no points
+- If either interval is empty, they cannot overlap
+- The condition `a < d and c < b` would incorrectly return `True` for some empty intervals
+
+For example:
+- [2,2) and [3,4): a=2, b=2, c=3, d=4 → `2 < 4 and 3 < 2` → `True and False` → `False` ✓
+- [2,2) and [1,3): a=2, b=2, c=1, d=3 → `2 < 3 and 1 < 2` → `True and True` → `True` ✗ (should be False since [2,2) is empty)
+
+The

@@ -1,0 +1,44 @@
+<|im_start|>system
+# Tools
+
+You have access to the following functions:
+
+<tools>
+{"function": {"description": "Read a UTF-8 file.", "name": "read", "parameters": {"additionalProperties": false, "properties": {"path": {"type": "string"}}, "required": ["path"], "type": "object"}}, "type": "function"}
+{"function": {"description": "Write a complete UTF-8 file.", "name": "write", "parameters": {"additionalProperties": false, "properties": {"content": {"type": "string"}, "path": {"type": "string"}}, "required": ["path", "content"], "type": "object"}}, "type": "function"}
+{"function": {"description": "Replace one exact occurrence of old_string in a file.", "name": "edit", "parameters": {"additionalProperties": false, "properties": {"new_string": {"type": "string"}, "old_string": {"type": "string"}, "path": {"type": "string"}}, "required": ["path", "old_string", "new_string"], "type": "object"}}, "type": "function"}
+{"function": {"description": "List relative files matching a glob pattern.", "name": "glob", "parameters": {"additionalProperties": false, "properties": {"pattern": {"type": "string"}}, "required": ["pattern"], "type": "object"}}, "type": "function"}
+{"function": {"description": "Run a shell command in the isolated task repository; no network.", "name": "bash", "parameters": {"additionalProperties": false, "properties": {"command": {"type": "string"}}, "required": ["command"], "type": "object"}}, "type": "function"}
+</tools>
+
+If you choose to call a function ONLY reply in the following format with NO suffix:
+
+<tool_call>
+<function=example_function_name>
+<parameter=example_parameter_1>
+value_1
+</parameter>
+<parameter=example_parameter_2>
+This is the value for the second parameter
+that can span
+multiple lines
+</parameter>
+</function>
+</tool_call>
+
+<IMPORTANT>
+Reminder:
+- Function calls MUST follow the specified format: an inner <function=...></function> block must be nested within <tool_call></tool_call> XML tags
+- Required parameters MUST be specified
+- You may provide optional reasoning for your function call in natural language BEFORE the function call, but NOT after
+- If there is no function call available, answer the question like normal with your current knowledge and do not tell the user about function calls
+</IMPORTANT>
+
+You are a concise coding agent. Work in /repo using the provided tools. Inspect the repository, fix the issue, and then give a short final summary. Use relative file paths. Only files in /repo persist.<|im_end|>
+<|im_start|>user
+Negative durations with nonzero minutes are calculated incorrectly. Repair the duration utility without changing positive durations or zero. The sign applies to the entire hours-and-minutes magnitude. Inspect the files, make the change, and finish with a brief summary.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+

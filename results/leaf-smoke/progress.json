@@ -1,0 +1,90 @@
+[
+  {
+    "task": "empty_intersection",
+    "termination": "generation_limit",
+    "turns": 4,
+    "elapsed_s": 95.18497664295137,
+    "baseline": {
+      "passed": false,
+      "checks": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    "reference": {
+      "passed": true,
+      "checks": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "grade": {
+      "passed": false,
+      "checks": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true
+      ]
+    },
+    "generated_tokens": 330,
+    "tool_calls": 3
+  },
+  {
+    "task": "signed_duration",
+    "termination": "turn_limit",
+    "turns": 4,
+    "elapsed_s": 92.80150825995952,
+    "baseline": {
+      "passed": false,
+      "checks": [
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    "reference": {
+      "passed": true,
+      "checks": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "grade": {
+      "passed": true,
+      "checks": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "generated_tokens": 313,
+    "tool_calls": 4
+  }
+]

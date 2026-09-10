@@ -15,3 +15,7 @@ We can implement a small independent harness, executable task validation, a meas
 The existing Vulkan workers from the Qwen3 project trained small attention-router proxies. They do not implement full Qwen3.5 backpropagation, optimizer state, asynchronous agent rollouts, or DPPO. They cannot be presented as FrogNano training.
 
 The first new experiment measures full attention against selective MoBA on the available Qwen3.5 checkpoint. A small coding smoke evaluation checks whether the inference path can still solve simple executable tasks. It is not SWE-bench or a repository-level agent evaluation. Before claiming a practical improvement, extend to held-out repositories, multiple task attempts, cached multi-turn contexts, and solve rate per unit wall time.
+
+## First local harness attempt
+
+We implemented an independent Leaf-inspired five-tool loop using the pinned Qwen chat template and isolated task workspaces. Two handcrafted repairs exercise tool parsing, file edits, hidden-during-interaction grading and termination. This is a local prerequisite experiment; it does not use FrogNano weights or implement DPPO. [Pilot method, results and commands](LEAF_PILOT.md).

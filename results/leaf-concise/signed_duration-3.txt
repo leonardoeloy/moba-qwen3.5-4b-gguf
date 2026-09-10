@@ -1,0 +1,15 @@
+<tool_call>
+<function=edit>
+<parameter=path>
+duration.py
+</parameter>
+<parameter=old_string>
+def duration_minutes(sign, hours, minutes):
+    return sign * hours * 60 + minutes
+</parameter>
+<parameter=new_string>
+def duration_minutes(sign, hours, minutes):
+    return sign * (hours * 60 + minutes)
+</parameter>
+</function>
+</tool_call>

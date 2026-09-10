@@ -27,6 +27,8 @@ A later cache experiment reached **3.56x smaller KV at 32K** (1,040 to 292.5 MiB
 
 11. Added persistent exact-prefix checkpoints containing both attention KV and DeltaNet recurrent state. At 32K, three different questions had bit-identical restored logits and tokens. Warm cache hits reduced complete 32-token benchmark time from about 555 seconds to 10.1–10.4 seconds (53–55x); paying the first full prefill/save gave 2.89x across three questions. This benefit requires an identical cached prefix and does not accelerate a new document. The checkpoint uses 339.13 MiB of storage. [Prefix-cache results and reproduction](docs/PREFIX_CACHE.md).
 
+12. Attempted an independent Leaf-style coding-agent harness inspired by FrogNano. Two bounded configurations each repaired 1/2 handcrafted tasks; the follow-up produced one natural finish. The other task exhausted its generation budget explaining examples. These are tool-loop smoke checks with frozen weights, not FrogNano training or SWE-bench results. [Pilot, failures and reproduction](docs/LEAF_PILOT.md).
+
 Current measurements and limitations are collected in the [test card](TEST_CARD.md). [FrogNano reproduction assessment](docs/FROGNANO.md) distinguishes accessible artifacts, feasible local work, and missing training infrastructure.
 
 ## Setup

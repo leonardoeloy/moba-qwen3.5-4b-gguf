@@ -31,3 +31,7 @@ The standalone prefix runner compiled against the unchanged pinned private backe
 The current source snapshot, executable and runtime library fingerprints match the 32K protocol, and the backend diff still matches the seven-file patch. Python syntax and prefix-documentation links passed checks. The actual driver used at each stage is retained; the 32K driver adds runtime-change checks and broader environment isolation to the smoke driver. The three-question complete-process amortization was independently calculated from the raw trial records and saved in `results/prefix-32k/analysis.json`.
 
 Raw checkpoints and logit arrays remain excluded by Git ignore rules. No unit-test suite was added. Restoration is exact on these observed same-policy runs; dense-model quality, long generations, arbitrary prefixes, production cache routing and sustained serving throughput were not evaluated by this experiment.
+
+## Leaf-style harness pilot
+
+Both two-task configurations completed. All 17 inference subprocesses exited successfully; one generation in each configuration hit its explicit token budget and was reported as such. Tool calls parsed and executed without reported tool errors, including an isolated Bash invocation. Starter implementations failed grading and reference implementations passed before each attempt. Final patch grades and natural termination are reported separately. Both actual driver versions and all traces are retained; the current driver matches the follow-up snapshot. No model parameters changed and no RL training was run.
